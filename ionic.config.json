@@ -1,0 +1,12 @@
+{
+  "name": "ion2-FullApp-PRO",
+  "app_id": "f0cf33a7",
+  "v2": true,
+  "typescript": true,
+  "proxies": [
+    {
+      "path": "/API/v1",
+      "proxyUrl": "http://62.109.16.138:1337/v1"
+    }
+  ]
+}
