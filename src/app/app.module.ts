@@ -1,3 +1,4 @@
+import { DevicePage } from './../pages/device/device';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AlertService } from './../common/alert.service';
 import { TimePipe } from './../common/time.pipe';
@@ -118,7 +119,8 @@ import { IonicStorageModule } from '@ionic/storage';
     Rating,
     GoogleMap,
     NonamePipe,
-    TimePipe
+    TimePipe,
+    DevicePage
   ],
   imports: [
     BrowserModule,
@@ -154,7 +156,8 @@ import { IonicStorageModule } from '@ionic/storage';
     FunctionalitiesPage,
     FacebookLoginPage,
     GoogleLoginPage,
-    ContactCardPage
+    ContactCardPage,
+    DevicePage
   ],
   providers: [
     FeedService,

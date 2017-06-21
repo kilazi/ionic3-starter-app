@@ -1,0 +1,103 @@
+<ion-header class="listing-header">
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Select a device</ion-title>
+    <ion-title>
+      <div class="header-logo">
+        <preload-image [ratio]="{w:583, h:100}" src="./assets/images/header_logo_white.png"></preload-image>
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="list-mini-content">
+  <div class="list-mini">
+    <h2>Connected devices</h2>
+    <ion-list>
+      <button class="list-item" ion-item *ngFor="let id of connectedMapping" (click)="goToDevice(devices[id])" [class.red]="devices[id].outOfRange">
+        <ion-row no-padding class="content-row one-line">
+          <!-- You can limit the rows of the description by using the class one-line. If you remove it, all the content from the row will be shown -->
+          <!--<ion-col no-padding width-18 class="item-avatar">
+            <preload-image class="avatar-image" [ratio]="{w:1, h:1}" [src]="item.image"></preload-image>
+          </ion-col>-->
+          <ion-col no-padding width-72 class="item-content">
+            <h3 class="item-title">{{devices[id].name | noname}}</h3>
+            <p class="item-description">{{devices[id].id}}</p>
+            <div class="signal" [class.signal-0]="devices[id].distance>=20 && !devices[id]['offline']" [class.signal-20]="devices[id].distance>=12 && devices[id].distance<20 && !devices[id]['offline']"
+    [class.signal-40]="devices[id].distance>=8 && devices[id].distance<12 && !devices[id]['offline']" [class.signal-60]="devices[id].distance>=5 && devices[id].distance<8 && !devices[id]['offline']"
+    [class.signal-80]="devices[id].distance>=3 && devices[id].distance<5 && !devices[id]['offline']" [class.signal-100]="devices[id].distance<3 && !devices[id]['offline']"
+    [class.signal-0]="devices[id]['offline']">
+    <div class="bar"></div>
+            <p class="item-description" *ngIf="!devices[id]['offline']">{{devices[id].distance}} m, {{devices[id].rssi}}, {{devices[id].timestamp}}</p>
+            <p class="item-description" *ngIf="devices[id]['outOfRange']">Out of range</p>
+          </ion-col>
+          <ion-col no-padding width-10 class="item-icon">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </button>
+    </ion-list>
+    <h2>Other devices</h2>
+    <ion-list>
+      <button ion-button full (click)="scan()">Update</button>
+      <button class="list-item" ion-item *ngFor="let id of mapping" (click)="connect(devices[id])">
+        <ion-row no-padding class="content-row one-line">
+          <!-- You can limit the rows of the description by using the class one-line. If you remove it, all the content from the row will be shown -->
+          <!--<ion-col no-padding width-18 class="item-avatar">
+            <preload-image class="avatar-image" [ratio]="{w:1, h:1}" [src]="item.image"></preload-image>
+          </ion-col>-->
+          <ion-col no-padding width-72 class="item-content">
+            <h3 class="item-title">{{devices[id].name | noname}}</h3>
+            <p class="item-description">{{devices[id].id}}</p>
+            <div  
+              class="signal"
+              [class.signal-0]="devices[id].distance>=80" 
+              [class.signal-20]="devices[id].distance>=50 && devices[id].distance<80 " 
+              [class.signal-40]="devices[id].distance>=30 && devices[id].distance<50 " 
+              [class.signal-60]="devices[id].distance>=15 && devices[id].distance<30 " 
+              [class.signal-80]="devices[id].distance>=6 && devices[id].distance<15" 
+              [class.signal-100]="devices[id].distance<6" 
+            ><div class="bar"></div></div>
+            <p class="item-description">{{devices[id].distance}} m, {{devices[id].rssi}}</p>
+          </ion-col>
+          <ion-col no-padding width-10 class="item-icon">
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </button>
+    </ion-list>
+  </div>
+</ion-content>
+
+<!--
+<ion-content class="listing-content">
+  <background-image class="image-heading" [src]="listing.banner_image">
+    <ion-row class="heading-row">
+      <ion-col no-padding width-100>
+        <h2 class="main-title">{{listing.banner_title}}</h2>
+      </ion-col>
+    </ion-row>
+  </background-image>
+  <h4 class="categories-title">Popular</h4>
+  <ion-scroll scrollX="true" class="horizontal-categories">
+    <ion-row class="categories-row">
+      <ion-col width-30 class="horizontal-item" *ngFor="let popular of listing.populars">
+        <preload-image [ratio]="{w:1, h:1}" [src]="popular.image" title="popular.title"></preload-image>
+      </ion-col>
+    </ion-row>
+  </ion-scroll>
+  <h4 class="categories-title">Browse categories</h4>
+  <ion-row class="grid-categories">
+    <ion-col width-50 class="category-item" *ngFor="let category of listing.categories">
+      <background-image tappable class="category-heading" [src]="category.image" (click)="goToFeed(category)">
+        <ion-row class="heading-row">
+          <ion-col no-padding width-100>
+            <h2 class="category-title">{{category.title}}</h2>
+          </ion-col>
+        </ion-row>
+      </background-image>
+    </ion-col>
+  </ion-row>
+</ion-content>-->

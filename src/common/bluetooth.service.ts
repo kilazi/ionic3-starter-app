@@ -3,15 +3,18 @@ import { GlobalService } from './global.service';
 import { Observable } from 'rxjs/Observable';
 import { HttpService } from './http.service';
 import { BLE } from '@ionic-native/ble';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter, OnInit } from '@angular/core';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 const signal = -59;
 
 @Injectable()
-export class BTService {
+export class BTService implements OnInit{
     public devices: any = {};
     public mapping: Array<string> = [];
     public connectedMapping: Array<string> = [];
+    public updatedMETA: EventEmitter<any>;
+    public notificationRange: EventEmitter<number>;
+    private range: number = 5;
     constructor(
         private ble: BLE,
         private http: HttpService,
@@ -19,11 +22,19 @@ export class BTService {
         private alert: AlertService,
         private localNotifications: LocalNotifications
     ) {
+        this.updatedMETA = new EventEmitter();
+        this.notificationRange = new EventEmitter<number>();
+    }
 
+    ngOnInit() {
+        this.notificationRange.subscribe(range => {
+            this.range = range;
+            console.log('range changed to ' + range);
+        })
     }
 
     measureDistance(rssi) {
-        console.log('measureDistance called', rssi);
+        //console.log('measureDistance called', rssi);
 
         if (rssi == 0) {
             return -1.0;
@@ -31,33 +42,33 @@ export class BTService {
 
         let r = rssi * 1.0 / signal;
         if (r < 1.0) {
-            // console.log('calculated!', r, Math.pow(r, 10));
+            // //console.log('calculated!', r, Math.pow(r, 10));
             // let distance = Math.pow(r, 10)
-            let distance = Math.pow(r, 10) / 2
+            let distance = Math.pow(r, 10) / 4
             return distance.toFixed(2);
         } else {
-            // console.log('calculated!', r, (0.89976) * Math.pow(r, 7.7095) + 0.111);
+            // //console.log('calculated!', r, (0.89976) * Math.pow(r, 7.7095) + 0.111);
             // let distance = (0.89976) * Math.pow(r, 7.7095) + 0.111;
-            let distance = (0.89976) * Math.pow(r, 7.7095) / 2 + 0.111;
+            let distance = (0.89976) * Math.pow(r, 7.7095) / 4 + 0.111;
             return distance.toFixed(2);
         }
     }
 
     searchDevices(myDevices) {
-        console.log('searchDevices called', myDevices);
+        //console.log('searchDevices called', myDevices);
         let filter = [];
         // if (myDevices) filter = this.connectedMapping;
         return new Observable(observer => {
 
             this.ble.scan(filter, 2).subscribe((res) => {
-                // console.log('DISKOVERY', res);
-                console.log('1 er');
+                // //console.log('DISKOVERY', res);
+                //console.log('1 er');
                 res = this.processDevice(res, myDevices);
-                console.log('2 er');
+                //console.log('2 er');
                 this.mapping = this.mapping.sort((a, b) => this.sort(a, b));
                 this.connectedMapping = this.connectedMapping.sort((a, b) => this.sort(a, b));
 
-                console.log('Mapping after sort', this.mapping);
+                //console.log('Mapping after sort', this.mapping);
                 observer.next({ devices: this.devices, mapping: this.mapping, connectedMapping: this.connectedMapping });
             }, err => {
                 observer.error(err);
@@ -69,7 +80,7 @@ export class BTService {
     }
 
     processDevice(res, myDevices) {
-        console.log('processDevice called', res, myDevices);
+        //console.log('processDevice called', res, myDevices);
         res['distance'] = this.measureDistance(res['rssi']);
         if (res['rssi'] != 127 || res['rssi'] == 127 && this.devices[res['id']]) {
             if (res['rssi'] != 127) {
@@ -82,7 +93,7 @@ export class BTService {
                         });
                 } else res['timestamp'] = Date.now()
                 if (this.connectedMapping.indexOf(res['id']) != -1) {
-                    if (res['distance'] > 5) {
+                    if (res['distance'] > this.range) {
                         if (!res['outOfRange']) {
                             this.alert.outOfRange(res);
                             this.localNotifications.schedule({
@@ -107,7 +118,7 @@ export class BTService {
     }
 
     mockDevices(myDevices) {
-        console.log('mockDevices called', myDevices);
+        //console.log('mockDevices called', myDevices);
         let rssi = -60;
         this.devices['TEST_DEVICE'] = {
             id: 'TEST_DEVICE',
@@ -156,12 +167,12 @@ export class BTService {
     }
 
     showMyDevices() {
-        console.log('showMyDevices called');
+        //console.log('showMyDevices called');
         return new Observable(observer => {
             this.http.get('devices/list').subscribe((res: any) => {
-                console.log('showMyDevices', res);
+                //console.log('showMyDevices', res);
                 res.forEach((device, index) => {
-                    console.log('forEach my devices', device);
+                    //console.log('forEach my devices', device);
                     // if(this.devices[device['id']]) online.push(device['id']);
                     if (!this.devices[device['id']] && device['id']) {
                         device['offline'] = true;
@@ -176,21 +187,21 @@ export class BTService {
                 })
                 this.connectedMapping = this.connectedMapping.sort((a, b) => this.sort(a, b));
                 observer.next({ devices: this.devices, connectedMapping: this.connectedMapping });
-                console.log(this.mapping, this.connectedMapping);
+                //console.log(this.mapping, this.connectedMapping);
             })
         })
     }
 
     connectBLE(id) {
-        this.ble.connect(id).subscribe(res => {
-            console.log('connect successful!', res);
-        }, err => {
-            console.log('error connecting to device', err);
-        })
+        // this.ble.connect(id).subscribe(res => {
+        //     //console.log('connect successful!', res);
+        // }, err => {
+        //     //console.log('error connecting to device', err);
+        // })
     }
 
     connectDevice(device) {
-        console.log('connectDevice called', device);
+        //console.log('connectDevice called', device);
         return new Observable(observer => {
             this.connectBLE(device['id']);
             this.http.post('devices/add', device).subscribe((res: any) => {
@@ -204,7 +215,7 @@ export class BTService {
     }
 
     moveDeviceToConnected(device) {
-        console.log('moveDeviceToConnected called', device);
+        //console.log('moveDeviceToConnected called', device);
         if (this.connectedMapping.indexOf(device['id']) == -1) {
             this.connectedMapping.push(device['id']);
         }
@@ -214,7 +225,7 @@ export class BTService {
     disconnectDevice(device_id) {
         return this.http.post('devices/delete', { device_id: device_id }).map((res: any) => {
             res = res.json();
-            console.log('my delete', res);
+            //console.log('my delete', res);
             return res;
 
         })

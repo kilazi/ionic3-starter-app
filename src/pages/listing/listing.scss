@@ -14,6 +14,43 @@ listing-page {
 	$categories-grid-padding: 10px;
 	$categories-horizontal-list-padding: 10px;
 
+.signal {
+	width: 100%; 
+	height: 5px;
+	border: 1px solid black;
+	.bar {
+		width:100%;
+		height: 100%;
+	}
+}
+
+.signal-0 .bar{
+	width: 0%;
+}
+
+.signal-20 .bar{
+	width: 20%;
+	background-color: red;
+}
+
+
+.signal-40 .bar{
+	width: 40%;
+	background-color: orange;
+}
+
+.signal-60 .bar{
+	width: 60%;
+	background-color: yellow;
+}
+.signal-80 .bar{
+	width: 80%;
+	background-color: yellowgreen;
+}
+.signal-100 .bar{
+	width: 100%;
+	background-color: green;
+}
 	.listing-header
 	{
 		.header-logo
@@ -146,43 +183,6 @@ listing-page {
 	}
 }
 
-.signal {
-	width: 100%; 
-	height: 5px;
-	border: 1px solid black;
-	.bar {
-		width:100%;
-		height: 100%;
-	}
-}
-
-.signal-0 .bar{
-	width: 0%;
-}
-
-.signal-20 .bar{
-	width: 20%;
-	background-color: red;
-}
-
-
-.signal-40 .bar{
-	width: 40%;
-	background-color: orange;
-}
-
-.signal-60 .bar{
-	width: 60%;
-	background-color: yellow;
-}
-.signal-80 .bar{
-	width: 80%;
-	background-color: yellowgreen;
-}
-.signal-100 .bar{
-	width: 100%;
-	background-color: green;
-}
 .red {
 	color: red;
 	font-weight: bold;

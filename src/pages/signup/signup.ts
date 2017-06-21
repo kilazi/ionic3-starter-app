@@ -60,7 +60,10 @@ export class SignupPage {
     this.authService.register(form['email'], form['password']).subscribe(res => {
       this.handleToken(res['data']);
     }, err => {
+      
+      this.gs.simpleAlert(err);
       err = err.json();
+      this.gs.simpleAlert(err);
       this.gs.simpleAlert(err.error);
     });
     // this.nav.setRoot(this.main_page.component);

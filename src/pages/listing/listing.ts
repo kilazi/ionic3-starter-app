@@ -1,6 +1,7 @@
+import { DevicePage } from './../device/device';
 import { GlobalService } from './../../common/global.service';
 import { BTService } from './../../common/bluetooth.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 
 import { FeedPage } from '../feed/feed';
@@ -19,7 +20,7 @@ const signal = -59;
   selector: 'listing-page',
   templateUrl: 'listing.html',
 })
-export class ListingPage {
+export class ListingPage implements OnInit {
   listing: ListingModel = new ListingModel();
   loading: any;
 
@@ -83,6 +84,7 @@ export class ListingPage {
         this.devices = res['devices'];
         this.mapping = res['mapping'];
         this.connectedMapping = res['connectedMapping'];
+        this.bt.updatedMETA.emit(this.devices);
         // this.gs.simpleLoading(false);
       }, err => {
         // this.gs.simpleLoading(false);
@@ -111,7 +113,7 @@ export class ListingPage {
   }
 
 
-  ionViewDidLoad() {
+  ngOnInit() {
     // this.loading.present();
     // if (this.ble)
     
@@ -121,6 +123,7 @@ export class ListingPage {
       this.devices = res['devices'];
       this.gs.simpleLoading(false);
       this.startScanning(4000);
+      
       // offline.forEach(id=>this.connectDevice(id));
     }, err => {
       this.gs.simpleAlert(err, 'Error');
@@ -153,6 +156,12 @@ export class ListingPage {
     //   () => console.log('Native layer recieved the request to monitoring'),
     //   error => console.error('Native layer failed to begin monitoring: ', JSON.stringify(error))
     //   );
+  }
+
+  goToDevice(device) {
+    this.nav.push(DevicePage, {
+      device: device
+    })
   }
 
   connect(device) {

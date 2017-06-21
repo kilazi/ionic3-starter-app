@@ -75828,6 +75828,693 @@ ion-app.md contact-card-page .contact-card-content .button-bar > .button {
   box-shadow: none;
 }
 
+device-page .signal {
+  width: 100%;
+  height: 50px;
+  border: 1px solid black;
+}
+
+device-page .signal .bar {
+  width: 100%;
+  height: 100%;
+}
+
+device-page .signal-0 .bar {
+  width: 0%;
+}
+
+device-page .signal-20 .bar {
+  width: 20%;
+  background-color: red;
+}
+
+device-page .signal-40 .bar {
+  width: 40%;
+  background-color: orange;
+}
+
+device-page .signal-60 .bar {
+  width: 60%;
+  background-color: yellow;
+}
+
+device-page .signal-80 .bar {
+  width: 80%;
+  background-color: yellowgreen;
+}
+
+device-page .signal-100 .bar {
+  width: 100%;
+  background-color: green;
+}
+
+device-page .range-list .range-item ion-range .range-knob {
+  background: #00e9d5;
+}
+
+device-page .switchers-list .switcher-item ion-toggle .toggle-icon.toggle-checked .toggle-inner {
+  background-color: #00e9d5;
+}
+
+filters-page ion-header .toolbar-background {
+  border: none !important;
+  background-color: #ae75e7;
+}
+
+filters-page ion-header .toolbar-title,
+filters-page ion-header .back-button,
+filters-page ion-header .bar-button {
+  color: #FFFFFF;
+}
+
+filters-page ion-item-divider {
+  padding: 15px !important;
+  background-color: transparent !important;
+}
+
+filters-page ion-item-divider .item-inner {
+  min-height: 0px;
+}
+
+filters-page ion-item-divider .item-inner ion-label {
+  margin: 0px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.9px;
+  color: #5e5874;
+}
+
+filters-page .filters-content {
+  background-color: #f7f7f7;
+}
+
+filters-page .range-list .range-item {
+  padding: 15px;
+  border: none !important;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .range-list .range-item .item-inner {
+  padding: 0px;
+  border: none;
+}
+
+filters-page .range-list .range-item ion-label {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  width: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+  margin: 0px;
+}
+
+filters-page .range-list .range-item ion-label .range-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #c2c2c2;
+  -webkit-flex: 1 0 12%;
+  -ms-flex: 1 0 12%;
+  flex: 1 0 12%;
+  max-width: 100%;
+  margin: 0px;
+}
+
+filters-page .range-list .range-item ion-label .range-value:first-child {
+  text-align: left;
+}
+
+filters-page .range-list .range-item ion-label .range-value:last-child {
+  text-align: right;
+}
+
+filters-page .range-list .range-item ion-label .range-label {
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  text-align: center;
+  color: #c2c2c2;
+  -webkit-flex: 0 1 76%;
+  -ms-flex: 0 1 76%;
+  flex: 0 1 76%;
+  max-width: 76%;
+  margin: 0px;
+}
+
+filters-page .range-list .range-item ion-label .range-label:first-child {
+  text-align: left;
+}
+
+filters-page .range-list .range-item ion-range {
+  padding: 12px 12px 0px;
+}
+
+filters-page .range-list .range-item ion-range .range-tick {
+  display: none;
+}
+
+filters-page .range-list .range-item ion-range .range-bar {
+  background: rgba(153, 153, 153, 0.8);
+  height: 2px;
+}
+
+filters-page .range-list .range-item ion-range .range-bar-active {
+  background: #00e9d5;
+}
+
+filters-page .checkbox-list {
+  padding-left: 15px;
+  background-color: #FFFFFF;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .checkbox-list .checkbox-item {
+  padding: 0px;
+  border: none !important;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .checkbox-list .checkbox-item .item-inner {
+  padding: 0px;
+  border: none;
+}
+
+filters-page .checkbox-list .checkbox-item .item-inner ion-label {
+  margin: 16px 0px 16px 8px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #c2c2c2;
+}
+
+filters-page .checkbox-list .checkbox-item ion-checkbox {
+  -webkit-order: 2;
+  -ms-flex-order: 2;
+  order: 2;
+  margin-right: 22px !important;
+}
+
+filters-page .checkbox-list .checkbox-item ion-checkbox .checkbox-icon {
+  border: none;
+  background-color: #FFFFFF;
+}
+
+filters-page .checkbox-list .checkbox-item ion-checkbox .checkbox-icon.checkbox-checked .checkbox-inner {
+  border-color: #00e9d5;
+  border-width: 3px;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  width: 9px;
+  height: 18px;
+  top: 2px;
+}
+
+filters-page .radio-group {
+  padding-left: 15px;
+  background-color: #FFFFFF;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .radio-group .radio-item {
+  padding: 0px;
+  border: none !important;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .radio-group .radio-item .item-inner {
+  padding: 0px;
+  border: none;
+}
+
+filters-page .radio-group .radio-item .item-inner ion-label {
+  margin: 16px 0px 16px 8px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #c2c2c2;
+}
+
+filters-page .radio-group .radio-item ion-radio {
+  margin-left: 8px !important;
+  margin-right: 12px !important;
+}
+
+filters-page .radio-group .radio-item ion-radio .radio-icon {
+  border: none;
+  background-color: #f7f7f7;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+}
+
+filters-page .radio-group .radio-item ion-radio .radio-icon .radio-inner {
+  background-color: #f7f7f7;
+}
+
+filters-page .radio-group .radio-item ion-radio .radio-icon.radio-checked .radio-inner {
+  border: none;
+  background-color: #00e9d5;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  top: 5px;
+  left: 5px;
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+filters-page .checkbox-tags {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 0px 15px;
+}
+
+filters-page .checkbox-tags .checkbox-tag {
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  width: initial;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  text-align: center;
+  background-color: transparent;
+  border: none !important;
+  padding: 0px;
+  margin: 5px;
+}
+
+filters-page .checkbox-tags .checkbox-tag ion-checkbox {
+  margin: 0px !important;
+}
+
+filters-page .checkbox-tags .checkbox-tag ion-checkbox .checkbox-icon {
+  display: none;
+}
+
+filters-page .checkbox-tags .checkbox-tag .item-inner {
+  padding: 0px 8px;
+  border: none;
+  background-color: #FFFFFF;
+  color: #c2c2c2;
+}
+
+filters-page .checkbox-tags .checkbox-tag .item-inner ion-label {
+  margin: 8px 6px;
+}
+
+filters-page .checkbox-tags .checkbox-tag.item-checkbox-checked .item-inner {
+  background-color: #00e9d5;
+  color: #FFFFFF;
+}
+
+filters-page .rounded-tags {
+  background-color: #FFFFFF;
+  padding: 15px;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .rounded-tags .checkbox-tag .item-inner {
+  border-radius: 2.2rem;
+  background-color: #f0f0f0;
+  color: #FFFFFF;
+}
+
+filters-page .radio-tags {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+filters-page .radio-tags .radio-tag {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  margin: 5px;
+  padding: 0px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  min-height: initial;
+}
+
+filters-page .radio-tags .radio-tag.item-block {
+  border: 1px solid #00e9d5;
+}
+
+filters-page .radio-tags .radio-tag ion-radio {
+  margin: 0px !important;
+}
+
+filters-page .radio-tags .radio-tag ion-radio .radio-icon {
+  display: none;
+}
+
+filters-page .radio-tags .radio-tag .item-inner {
+  border: none;
+  background-color: #FFFFFF;
+}
+
+filters-page .radio-tags .radio-tag .item-inner ion-label {
+  color: #00e9d5;
+}
+
+filters-page .radio-tags .radio-tag.item-radio-disabled {
+  opacity: 0.5;
+}
+
+filters-page .radio-tags .radio-tag.item-radio-checked {
+  border-color: #00e9d5;
+}
+
+filters-page .radio-tags .radio-tag.item-radio-checked .item-inner {
+  background-color: #00e9d5;
+}
+
+filters-page .radio-tags .radio-tag.item-radio-checked .item-inner ion-label {
+  color: #FFFFFF;
+}
+
+filters-page .radio-tags {
+  -webkit-box-lines: single;
+  -moz-box-lines: single;
+  box-lines: single;
+  -webkit-flex-wrap: nowrap;
+  -ms-flex-wrap: nowrap;
+  flex-wrap: nowrap;
+  padding: 15px;
+}
+
+filters-page .radio-tags .radio-tag {
+  border-radius: 8px;
+}
+
+filters-page .radio-tags .radio-tag .item-inner {
+  padding: 0px 8px;
+}
+
+filters-page .radio-tags .radio-tag .item-inner ion-label {
+  margin: 8px 0px;
+}
+
+filters-page .switchers-list .switcher-item {
+  border: none !important;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .switchers-list .switcher-item .item-inner {
+  padding: 0px;
+  border: none;
+}
+
+filters-page .switchers-list .switcher-item .item-inner ion-label {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #c2c2c2;
+}
+
+filters-page .switchers-list .switcher-item ion-toggle .toggle-icon.toggle-checked {
+  background-color: #00e9d5;
+}
+
+filters-page .switchers-list .switcher-item {
+  padding: 0px;
+}
+
+filters-page .switchers-list .switcher-item .item-inner {
+  padding: 0px;
+  border: none;
+}
+
+filters-page .switchers-list .switcher-item .item-inner ion-label {
+  margin-left: 15px;
+}
+
+filters-page .counter-list .counter-item {
+  padding: 0px;
+  border: none !important;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .counter-list .counter-item .item-inner {
+  padding: 0px;
+  border: none;
+}
+
+filters-page .counter-list .counter-item .item-inner ion-label {
+  margin: 0px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+}
+
+filters-page .counter-list .counter-item .item-inner .counter-label {
+  margin: 15px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #c2c2c2;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+filters-page .counter-list .counter-item .item-inner .counter-value {
+  margin: 15px 5px;
+  font-size: 1.6rem;
+  font-weight: 500;
+  text-align: center;
+  color: #00e9d5;
+}
+
+filters-page .counter-list .counter-item .item-inner counter-input {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  text-align: right;
+  padding-right: 15px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  -o-align-items: center;
+  align-items: center;
+  -ms-flex-align: center;
+  box-pack: end;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  -ms-justify-content: flex-end;
+  -o-justify-content: flex-end;
+  justify-content: flex-end;
+  -ms-flex-pack: end;
+}
+
+filters-page .counter-list .counter-item .item-inner counter-input .counter-icon {
+  margin: 0px;
+  border-radius: 50%;
+  border: 1px solid #00e9d5;
+  background-color: #FFFFFF;
+  color: #00e9d5;
+  width: 34px;
+  height: 34px;
+}
+
+filters-page .counter-list .counter-item .item-inner counter-input .counter-icon ion-icon {
+  color: #00e9d5;
+}
+
+filters-page .counter-list .counter-item .item-inner counter-input[basic] .counter-icon {
+  width: initial;
+  border-radius: 12px;
+  height: 30px;
+}
+
+filters-page .counter-list .counter-item .item-inner counter-input .counter-inner {
+  font-size: 1.8rem;
+  text-align: center;
+  color: #00e9d5;
+  margin: 0px 12px;
+}
+
+filters-page .ratings-list .rating-item {
+  padding: 0px;
+  border: none !important;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+}
+
+filters-page .ratings-list .rating-item .item-inner {
+  padding: 0px;
+  border: none;
+}
+
+filters-page .ratings-list .rating-item .item-inner ion-label {
+  margin: 0px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-pack: justify;
+  -webkit-justify-content: space-between;
+  -moz-justify-content: space-between;
+  -ms-justify-content: space-between;
+  -o-justify-content: space-between;
+  justify-content: space-between;
+  -ms-flex-pack: justify;
+}
+
+filters-page .ratings-list .rating-item .item-inner .rating-label {
+  margin: 15px;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  color: #c2c2c2;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+filters-page .ratings-list .rating-item .item-inner rating {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  padding-right: 11px;
+}
+
+filters-page .ratings-list .rating-item .item-inner rating .rating-icon ion-icon {
+  color: #00e9d5;
+  font-size: 1.8em;
+}
+
+filters-page .color-tags {
+  background-color: #FFFFFF;
+  box-shadow: inset 0 -0.5px 0 0 #c2c2c2;
+  -webkit-box-lines: multiple;
+  -moz-box-lines: multiple;
+  box-lines: multiple;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+filters-page .color-tags .radio-tag[color-radio] {
+  border-radius: 50%;
+  -webkit-flex: 0 0 16%;
+  -ms-flex: 0 0 16%;
+  flex: 0 0 16%;
+  max-width: 16%;
+  margin: 2%;
+  padding: 0px;
+  border-width: 4px;
+  border-style: solid;
+}
+
+filters-page .color-tags .radio-tag[color-radio] .item-inner {
+  background-color: inherit;
+  padding: 0px;
+  padding-bottom: 100%;
+  height: 0px;
+}
+
+filters-page .color-tags .radio-tag[color-radio] .item-inner .input-wrapper {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+filters-page .color-tags .radio-tag[color-radio] .item-inner ion-label {
+  margin: 0px 2px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+}
+
+filters-page .color-tags .radio-tag[color-radio].item-radio-checked {
+  border-color: rgba(0, 0, 0, 0.3) !important;
+  box-shadow: none;
+}
+
+filters-page .color-tags .radio-tag[color-radio].item-radio-checked .item-inner ion-label {
+  color: #FFFFFF;
+}
+
+filters-page .color-tags .radio-tag[color-radio].item-radio-disabled {
+  opacity: 0.3;
+}
+
+ion-app.wp filters-page .range-list .range-item ion-range .range-knob {
+  background: #00e9d5;
+}
+
+ion-app.wp filters-page .switchers-list .switcher-item ion-toggle .toggle-icon {
+  border-color: #f0f0f0;
+}
+
+ion-app.wp filters-page .switchers-list .switcher-item ion-toggle .toggle-icon .toggle-inner {
+  background-color: #ae75e7;
+}
+
+ion-app.wp filters-page .switchers-list .switcher-item ion-toggle .toggle-icon.toggle-checked {
+  border-color: #ae75e7;
+}
+
+ion-app.wp filters-page .switchers-list .switcher-item ion-toggle .toggle-icon.toggle-checked .toggle-inner {
+  background-color: #f0f0f0;
+}
+
 facebook-login-page .facebook-header .toolbar-background {
   border: none !important;
   background-color: #3b5998;
@@ -78455,6 +79142,46 @@ list-2-page .list-mini-content .list-mini ion-list .list-item .content-row.one-l
   white-space: nowrap;
 }
 
+listing-page .signal {
+  width: 100%;
+  height: 5px;
+  border: 1px solid black;
+}
+
+listing-page .signal .bar {
+  width: 100%;
+  height: 100%;
+}
+
+listing-page .signal-0 .bar {
+  width: 0%;
+}
+
+listing-page .signal-20 .bar {
+  width: 20%;
+  background-color: red;
+}
+
+listing-page .signal-40 .bar {
+  width: 40%;
+  background-color: orange;
+}
+
+listing-page .signal-60 .bar {
+  width: 60%;
+  background-color: yellow;
+}
+
+listing-page .signal-80 .bar {
+  width: 80%;
+  background-color: yellowgreen;
+}
+
+listing-page .signal-100 .bar {
+  width: 100%;
+  background-color: green;
+}
+
 listing-page .listing-header .header-logo {
   width: 34vw;
 }
@@ -78604,46 +79331,6 @@ listing-page .listing-content .grid-categories .category-item .category-heading 
   letter-spacing: 0.4px;
   color: #FFFFFF;
   margin: 0px;
-}
-
-.signal {
-  width: 100%;
-  height: 5px;
-  border: 1px solid black;
-}
-
-.signal .bar {
-  width: 100%;
-  height: 100%;
-}
-
-.signal-0 .bar {
-  width: 0%;
-}
-
-.signal-20 .bar {
-  width: 20%;
-  background-color: red;
-}
-
-.signal-40 .bar {
-  width: 40%;
-  background-color: orange;
-}
-
-.signal-60 .bar {
-  width: 60%;
-  background-color: yellow;
-}
-
-.signal-80 .bar {
-  width: 80%;
-  background-color: yellowgreen;
-}
-
-.signal-100 .bar {
-  width: 100%;
-  background-color: green;
 }
 
 .red {
