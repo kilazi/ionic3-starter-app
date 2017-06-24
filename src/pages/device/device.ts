@@ -20,13 +20,20 @@ export class DevicePage implements OnInit{
   radioColorForm: FormGroup;
   device: any = {};
   devices: any = {};
-
+  active: string = 'pocket';
+  range: number = 0;
   ngOnInit() {
     this.bt.updatedMETA.subscribe(devices => {
       this.devices = devices;
       this.device = devices[this.device['id']];
       console.log(this.device, 'DEVICE UPDATE');
     })
+  }
+
+  setActive(type: string) {
+    this.device['type'] = type;
+    console.log('type changed');
+    this.bt.setType(this.device['id'], type);
   }
 
   constructor(

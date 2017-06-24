@@ -84,7 +84,7 @@ export class ListingPage implements OnInit {
         this.devices = res['devices'];
         this.mapping = res['mapping'];
         this.connectedMapping = res['connectedMapping'];
-        this.bt.updatedMETA.emit(this.devices);
+        
         // this.gs.simpleLoading(false);
       }, err => {
         // this.gs.simpleLoading(false);

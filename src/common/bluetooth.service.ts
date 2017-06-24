@@ -6,14 +6,75 @@ import { BLE } from '@ionic-native/ble';
 import { Injectable, EventEmitter, OnInit } from '@angular/core';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 const signal = -59;
-
+export const RANGE = {
+    pocket: {
+        0: [
+            5.5, 133333337
+        ],
+        1: [
+            4.5, 5.5
+        ],
+        2: [
+            3.5, 4.5
+        ],
+        3: [
+            2.5, 3.5
+        ],
+        4: [
+            1.5, 2.5
+        ],
+        5: [
+            0, 1.5
+        ]
+    },
+    bag: {
+        0: [
+            20, 13333337
+        ],
+        1: [
+            12, 20
+        ],
+        2: [
+            8, 12
+        ],
+        3: [
+            5, 8
+        ],
+        4: [
+            3, 5
+        ],
+        5: [
+            0, 3 
+        ]
+    },
+    house: {
+        0: [
+            50, 13333337
+        ],
+        1: [
+            35, 50
+        ],
+        2: [
+            20, 35
+        ],
+        3: [
+            15, 20
+        ],
+        4: [
+            10, 15
+        ],
+        5: [
+            0, 10
+        ]
+    }
+}
 @Injectable()
 export class BTService implements OnInit{
     public devices: any = {};
     public mapping: Array<string> = [];
     public connectedMapping: Array<string> = [];
     public updatedMETA: EventEmitter<any>;
-    public notificationRange: EventEmitter<number>;
+    public notificationRange: EventEmitter<string>;
     private range: number = 5;
     constructor(
         private ble: BLE,
@@ -23,7 +84,7 @@ export class BTService implements OnInit{
         private localNotifications: LocalNotifications
     ) {
         this.updatedMETA = new EventEmitter();
-        this.notificationRange = new EventEmitter<number>();
+        this.notificationRange = new EventEmitter<string>();
     }
 
     ngOnInit() {
@@ -31,6 +92,20 @@ export class BTService implements OnInit{
             this.range = range;
             console.log('range changed to ' + range);
         })
+    }
+
+    setType (device_id, type) {
+        console.log('SET TYPE TO', type);
+        this.devices[device_id]['range_type'] = type;
+        this.searchDevices(false);
+    }
+
+    public rangeCondition(type, value): number {
+        for(let i = 0; i<=5; i++){
+            if(value>=RANGE[type][i][0] && value<RANGE[type][i][1]) {
+                return i;
+            }
+        }    
     }
 
     measureDistance(rssi) {
@@ -69,6 +144,8 @@ export class BTService implements OnInit{
                 this.connectedMapping = this.connectedMapping.sort((a, b) => this.sort(a, b));
 
                 //console.log('Mapping after sort', this.mapping);
+                console.log('search devices', res, 'EMIT');
+                this.updatedMETA.emit(this.devices);
                 observer.next({ devices: this.devices, mapping: this.mapping, connectedMapping: this.connectedMapping });
             }, err => {
                 observer.error(err);
@@ -82,6 +159,8 @@ export class BTService implements OnInit{
     processDevice(res, myDevices) {
         //console.log('processDevice called', res, myDevices);
         res['distance'] = this.measureDistance(res['rssi']);
+        if(!res['type']) res['type'] = 'pocket';
+        res['rangeCondition'] = this.rangeCondition(res['type'], res['distance']);
         if (res['rssi'] != 127 || res['rssi'] == 127 && this.devices[res['id']]) {
             if (res['rssi'] != 127) {
                 if (myDevices && res['timestamp'] && Date.now() - res['timestamp'] > 10000) {
@@ -103,9 +182,8 @@ export class BTService implements OnInit{
                             });
                         }
                         res['outOfRange'] = true;
-
                     } else if (Date.now() - res['timestamp'] <= 10000) {
-                        res['outOfRange = false']
+                        res['outOfRange'] = false;
                     }
                 }
                 this.devices[res['id']] = res;
@@ -167,6 +245,7 @@ export class BTService implements OnInit{
     }
 
     showMyDevices() {
+        
         //console.log('showMyDevices called');
         return new Observable(observer => {
             this.http.get('devices/list').subscribe((res: any) => {
@@ -179,13 +258,15 @@ export class BTService implements OnInit{
                         device['distance'] = 1337;
                         this.devices[device['id']] = device;
                         this.connectedMapping.push(device['id']);
-
+                        
                     } else {
                         this.moveDeviceToConnected(device);
 
                     }
                 })
+                
                 this.connectedMapping = this.connectedMapping.sort((a, b) => this.sort(a, b));
+                
                 observer.next({ devices: this.devices, connectedMapping: this.connectedMapping });
                 //console.log(this.mapping, this.connectedMapping);
             })
