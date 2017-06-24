@@ -159,7 +159,8 @@ export class BTService implements OnInit{
     processDevice(res, myDevices) {
         //console.log('processDevice called', res, myDevices);
         res['distance'] = this.measureDistance(res['rssi']);
-        if(!res['type']) res['type'] = 'pocket';
+        if(!this.devices[res['id']] || (this.devices[res['id']] && !this.devices[res['id']]['type'])) res['type'] = 'pocket';
+        else res['type'] = this.devices[res['id']]['type'];
         res['rangeCondition'] = this.rangeCondition(res['type'], res['distance']);
         if (res['rssi'] != 127 || res['rssi'] == 127 && this.devices[res['id']]) {
             if (res['rssi'] != 127) {
