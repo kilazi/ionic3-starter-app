@@ -1,3 +1,4 @@
+import { MapsPage } from './../pages/maps/maps';
 import { BTService } from './../common/bluetooth.service';
 import { LoginPage } from './../pages/login/login';
 import { HttpService } from './../common/http.service';
@@ -58,6 +59,7 @@ export class MyApp {
 
     this.pushPages = [
       { title: 'Layouts', icon: 'grid', component: LayoutsPage },
+      { title: 'Maps', icon: 'grid', component: MapsPage },
       { title: 'Settings', icon: 'settings', component: SettingsPage }
     ];
 

@@ -1,14 +1,16 @@
 import { BTService } from './../../common/bluetooth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController, Range, NavParams } from 'ionic-angular';
 import { FormGroup, FormControl } from '@angular/forms';
 import { counterRangeValidator } from '../../components/counter-input/counter-input';
-
+import { GoogleMap } from "../../components/google-map/google-map";
+import { MapsModel, MapPlace } from './maps.model';
+import { Geolocation } from '@ionic-native/geolocation';
 @Component({
   selector: 'device-page',
   templateUrl: 'device.html'
 })
-export class DevicePage implements OnInit{
+export class DevicePage implements OnInit {
   rangeForm: any;
   checkboxForm: FormGroup;
   radioForm: FormGroup;
@@ -22,13 +24,49 @@ export class DevicePage implements OnInit{
   devices: any = {};
   active: string = 'pocket';
   range: number = 0;
+  mapCenter: any = {};
+  mapOptions: google.maps.MapOptions = {};
   ngOnInit() {
     this.bt.updatedMETA.subscribe(devices => {
       this.devices = devices;
       this.device = devices[this.device['id']];
       console.log(this.device, 'DEVICE UPDATE');
     })
+    this.geolocation.getCurrentPosition().then((position) => {
+      console.log('got position', position);
+      let current_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      console.log('setLocation', current_location);
+      this.map_model.map_options.center.lat = position.coords.latitude;
+      this.map_model.map_options.center.lng = position.coords.longitude;
+      // this.map_model.map.setCenter(current_location);
+      this._GoogleMap.$mapReady.subscribe(map => {
+        this.map_model.init(map);
+        
+        map.setCenter(this.map_model.map_options.center);
+        // _loading.dismiss();
+      });
+
+    });
+
   }
+
+  @ViewChild(GoogleMap) _GoogleMap: GoogleMap;
+  map_model: MapsModel = new MapsModel();
+
+
+  loadMap() {
+
+    let latLng = new google.maps.LatLng(-34.9290, 138.6010);
+
+    this.mapOptions = {
+      center: { lat: 40.785091, lng: -73.968285 },
+      zoom: 13,
+      disableDefaultUI: true
+    }
+
+
+  }
+
 
   setActive(type: string) {
     this.device['type'] = type;
@@ -39,7 +77,8 @@ export class DevicePage implements OnInit{
   constructor(
     public nav: NavController,
     private navParams: NavParams,
-    private bt: BTService
+    private bt: BTService,
+    private geolocation: Geolocation
   ) {
     this.device = navParams.get('device');
     console.log('device', this.device);

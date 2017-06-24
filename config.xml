@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.startapplabs.ion2FullApp" version="1.4.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>ion2-FullApp PRO</name>
-  <description>The Best Ionic 2 Starter app - PRO version</description>
-  <author email="hi@ionicthemes.com" href="https://ionicthemes.com/">Ionic Themes</author>
+<widget id="com.whitetechnologies.bluetooth" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>wt-bt</name>
+  <description>WT BT</description>
+  <author email="sergeev.maxs@gmail.com" href="http://maxs.rocks/">Sergeev Maxs</author>
   <content src="index.html"/>
   <access origin="*"/>
   <allow-navigation href="*"/>
