@@ -1,3 +1,4 @@
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { device } from './bluetooth.service';
 // import { LocalNotifications } from '@ionic-native/local-notifiactions';
 import { Platform, AlertController } from 'ionic-angular';
@@ -12,7 +13,7 @@ import { Storage } from '@ionic/storage';
 export class AlertService {
     constructor(
         private alertCtrl: AlertController,
-        // private localNotifications: LocalNotifications
+        private localNotifications: LocalNotifications
     ) {
 
 
@@ -29,11 +30,11 @@ export class AlertService {
             buttons: ['COMMON.DISMISS']
         });
         alert.present();
-        // this.localNotifications.schedule({
-        //     id: 1,
-        //     text: 'Device out of range!',
-        //     sound: 'file://sound.mp3'
-        // });
+        this.localNotifications.schedule({
+            id: 1,
+            text: 'Device out of range!',
+            // sound: 'file://sound.mp3'
+        });
     }
 
     public lostConnection(device: device): void {
@@ -48,10 +49,10 @@ export class AlertService {
             buttons: ['COMMON.DISMISS']
         });
         alert.present();
-        // this.localNotifications.schedule({
-        //     id: 1,
-        //     text: 'Device out of range!',
-        //     sound: 'file://sound.mp3'
-        // });
+        this.localNotifications.schedule({
+            id: 1,
+            text: 'Lost connectin with a device!',
+            // sound: 'file://sound.mp3'
+        });
     }
 }

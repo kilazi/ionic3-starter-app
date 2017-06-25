@@ -1,12 +1,12 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{device.name | noname}}</ion-title>
+    <ion-title *ngIf="device">{{device.name | noname}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="filters-content">
 
-  <ion-item-group class="filters-group">
+  <ion-item-group class="filters-group" *ngIf="device">
     <ion-item-divider>Device Type</ion-item-divider>
     <!--<form [formGroup]="rangeForm">
         <ion-list class="range-list">
@@ -19,12 +19,12 @@
           </ion-item>
         </ion-list>
       </form>-->
-    <button ion-button [clear]="device['type']!='pocket'" [round]="device['type']=='pocket'" (click)="setActive('pocket')">Pocket</button>
-    <button ion-button [clear]="device['type']!='bag'" [round]="device['type']=='bag'" (click)="setActive('bag')">Bag</button>
-    <button ion-button [clear]="device['type']!='house'" [round]="device['type']=='house'" (click)="setActive('house')">House</button>
+    <button ion-button [clear]="device.meta['type']!='pocket'" [round]="device.meta['type']=='pocket'" (click)="setActive('pocket')">Pocket</button>
+    <button ion-button [clear]="device.meta['type']!='bag'" [round]="device.meta['type']=='bag'" (click)="setActive('bag')">Bag</button>
+    <button ion-button [clear]="device.meta['type']!='house'" [round]="device.meta['type']=='house'" (click)="setActive('house')">House</button>
 
-    <ion-item-divider>Distance</ion-item-divider>
-    <div class="signal signal-{{device.rangeCondition*20}}">
+    <ion-item-divider>Distance {{rangeCondition}}</ion-item-divider>
+    <div class="signal signal-{{device.meta.rangeCondition*20}}">
       <div class="bar"></div>
     </div>
 <ion-item-divider>Device last position</ion-item-divider>

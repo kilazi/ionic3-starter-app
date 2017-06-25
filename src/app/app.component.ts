@@ -1,3 +1,4 @@
+import { GeolocationService } from './../common/geolocations.service';
 import { MyDevicesPage } from './../pages/my-devices/my-devices';
 import { AllDevicesPage } from './../pages/all-devices/all-devices';
 import { MapsPage } from './../pages/maps/maps';
@@ -40,13 +41,15 @@ export class MyApp {
     public authService: AuthService,
     public http: HttpService,
     public auth: AuthService,
-    public bt: BTService
+    public bt: BTService,
+    public geo: GeolocationService
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.splashScreen.hide();
       this.statusBar.styleDefault();
+      this.geo.watch();
     });
 
     this.pages = [
@@ -60,7 +63,7 @@ export class MyApp {
       { title: 'Maps', icon: 'grid', component: MapsPage },
       { title: 'Settings', icon: 'settings', component: SettingsPage }
     ];
- 
+  
     // this.bt.showMyDevices().subscribe(res => {
     //   res['connectedMapping'].forEach(id => this.bt.connectBLE(id)) 
     // })

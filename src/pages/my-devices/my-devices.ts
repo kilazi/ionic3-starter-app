@@ -20,20 +20,24 @@ export class MyDevicesPage implements OnInit {
 
     ngOnInit() {
         this.getInfo();
+        // console.log('ngOnInit myDEVICES');
         this.bt.init().subscribe(res => {
             this.devices = res.devices;
+            // console.log('res devices_meta' + JSON.stringify(res.devices_meta));
             this.devices_meta = res.devices_meta;
             this.mapping = res.mapping;
-            console.log('bt.init subscribe called');
+            // console.log('bt.init subscribe called' + JSON.stringify(res));
         }, err => {
             console.error('error bt init', err);
         });
         this.bt.deviceScanned.subscribe((device: device) => {
+            // console.log('deviceScanned here' + JSON.stringify(device.bt) + " ||| " + JSON.stringify(device.meta)); 
             this.devices[device.bt.id] = device.bt;
-            this.devices_meta[device.bt.id] = device.meta;
+            // console.log('wtf is undefined?? ' + JSON.stringify(this.devices_meta) + ' ||| ' + JSON.stringify(device.meta));
+            this.devices_meta[device.meta.id] = device.meta;
         })
     }
-
+ 
 
     getInfo() {
         let res = this.bt.getMyDevices();
@@ -57,6 +61,6 @@ export class MyDevicesPage implements OnInit {
             bt: this.devices[id],
             meta: this.devices_meta[id]
         };
-        this.nav.push(DevicePage, _device);
+        this.nav.push(DevicePage, {device: _device});
     }
 }

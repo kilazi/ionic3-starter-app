@@ -1,3 +1,4 @@
+import { NgZone } from '@angular/core';
 import { BTService, device } from './../../common/bluetooth.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController, Range, NavParams, LoadingController } from 'ionic-angular';
@@ -12,27 +13,53 @@ import { Geolocation } from '@ionic-native/geolocation';
 })
 export class DevicePage implements OnInit {
   private device: device;
+  // private rangeCondition: number = 5;
   @ViewChild(GoogleMap) _GoogleMap: GoogleMap;
   map_model: MapsModel = new MapsModel();
 
   constructor(
     private bt: BTService,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private ngZone: NgZone
   ) {
     this.device = this.navParams.get('device');
-    console.log('DEVICE PAGE OPEN', this.device);
+    console.log(this.device);
   }
 
+
+
   ngOnInit() {
+
     this.bt.deviceScanned.subscribe((device: device) => {
       if (device.bt.id == this.device.bt.id) {
-        this.device = device;
+        this.gs.simpleToast('Refreshed');
+        this.ngZone.run(() => {
+          console.log('this device was scanned '+ device.meta.type
+           + ', distance:  ' + device.meta.distance 
+           + ', time delta: ' + (Date.now() - device.meta.updated)
+           + ', alerted:  '+ device.meta.alerted);
+          this.device = device;
+          // this.rangeCondition = device.meta.rangeCondition;
+          if (this.device.meta.gps)
+            this.map_model.map.setCenter({ lat: this.device.meta.gps.latitude, lng: this.device.meta.gps.longitude });
+
+        })
+        // this.setActive(device.meta.type);
       }
     })
+
+    console.log('opened device', this.device);
+
     this._GoogleMap.$mapReady.subscribe(map => {
       this.map_model.init(map);
-
-    }); 
+      this.map_model.using_geolocation = true;
+      // console.log('set coords ' + JSON.stringify(this.device.meta.gps)); 
+      if (this.device.meta.gps) {
+        let location: google.maps.LatLng = new google.maps.LatLng(this.device.meta.gps.latitude, this.device.meta.gps.longitude);
+        this.map_model.map.setCenter(location);
+        this.map_model.addPlaceToMap(location, '#00e9d5');
+      }
+    });
   }
 
   // implements OnInit {
@@ -57,7 +84,7 @@ export class DevicePage implements OnInit {
   //     this.device = devices[this.device['id']];
   //     console.log(this.device, 'DEVICE UPDATE');
   //   })
-    
+
 
 
   // }
@@ -77,8 +104,8 @@ export class DevicePage implements OnInit {
   //     let current_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
 
-  //     env.map_model.using_geolocation = true;
-  //     env.map_model.map.setCenter(current_location);      
+  // env.map_model.using_geolocation = true;
+  // env.map_model.map.setCenter(current_location);      
 
   //   }).catch((error) => {
   //     console.log('Error getting location', error);      
@@ -102,11 +129,13 @@ export class DevicePage implements OnInit {
 
   // }
 
-  // setActive(type: string) {
-  //   this.device['type'] = type;
-  //   console.log('type changed');
-  //   this.bt.setType(this.device['id'], type);
-  // }
+  setActive(type: string) {
+    this.device.meta.type = type;
+    console.log('type changed');
+    this.bt.setType(this.device.bt['id'], type).subscribe(res => {
+      console.log('changed type successfully');
+    })
+  }
 
   // constructor(
   //   public nav: NavController,

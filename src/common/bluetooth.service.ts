@@ -66,22 +66,22 @@ const POSSIBLE_TIMEOUT = 5000;
 const RANGE = {
     pocket: {
         0: [
-            5.5, 133333337
+            3.5, 133333337
         ],
         1: [
-            4.5, 5.5
-        ],
-        2: [
-            3.5, 4.5
-        ],
-        3: [
             2.5, 3.5
         ],
-        4: [
+        2: [
             1.5, 2.5
         ],
+        3: [
+            1.0, 1.5
+        ],
+        4: [
+            0.5, 1.0
+        ],
         5: [
-            0, 1.5
+            0, 0.5
         ]
     },
     bag: {
@@ -152,8 +152,9 @@ export class BTService implements OnInit {
     public setType(device_id, type): Observable<device> {
         return new Observable(observer => {
             this.myDevices_meta[device_id].type = type;
-            let _device: device = this.processDevice(this.myDevices[device_id]);
-            observer.next(_device);
+            let _device: device = this.processDevice(this.myDevices[device_id], this.devices_meta[device_id]);
+            if (_device)
+                observer.next(_device);
         })
     }
     //end setters
@@ -184,7 +185,7 @@ export class BTService implements OnInit {
         }
     }
 
-    private sort(a, b, backwards = false): number {
+    private sort(a, b, backwards = false): 0 | 1 | -1 {
         if (this.myDevices_meta[a].distance < this.myDevices_meta[b].distance)
             if (backwards)
                 return 1;
@@ -198,7 +199,7 @@ export class BTService implements OnInit {
 
     public connectDevice(device: BTDevice): Observable<any> {
         return new Observable(observer => {
-            this.http.post('devices/add', {device:device, device_meta: this.getMeta(device)}).subscribe(() => {
+            this.http.post('devices/add', { device: device, device_meta: this.getMeta(device) }).subscribe(() => {
                 if (this.connectedMapping.indexOf(device.id) >= 0) observer.error('Trying to connect device which is already on the list.');
                 if (this.mapping.indexOf(device.id) == -1) observer.error('Could not find device, please try again.');
 
@@ -207,13 +208,15 @@ export class BTService implements OnInit {
 
                 this.connectedMapping.push(device.id);
                 this.myDevices[device.id] = device;
- 
-                let _device: device = this.processDevice(device);
 
-                this.myDevices[device.id] = _device.bt;
-                this.myDevices_meta[device.id] = _device.meta;
+                let _device: device = this.processDevice(device, this.devices_meta[device.id]);
+                if (_device) {
 
-                observer.next();
+                    this.myDevices[device.id] = _device.bt;
+                    this.myDevices_meta[device.id] = _device.meta;
+
+                    observer.next();
+                }
             }, err => observer.error(err));
         })
     }
@@ -231,7 +234,7 @@ export class BTService implements OnInit {
 
 
 
-    private processDevice(device: BTDevice): device {
+    private processDevice(device: BTDevice, meta: deviceMETA): device {
         //console.log('processDevice called', res, myDevices);
         let _device: device = {
             bt: device,
@@ -241,7 +244,7 @@ export class BTService implements OnInit {
         }
 
         if (!this.myDevices[device.id]) {
-            console.error('Trying to process device which is not on the connected list!');
+            // console.error('Trying to process device which is not on the connected list!');
             return;
         }
 
@@ -249,25 +252,37 @@ export class BTService implements OnInit {
         if (device.rssi != 127) {
             _device.meta = this.getMeta(device);
             if (_device.meta.distance > RANGE[_device.meta.type][0][0]) {
-                if (this.geo.getCurrentPosition() !)
-                    _device.meta.gps = this.geo.getCurrentPosition();
+
                 _device.meta.offline = true;
-                _device.meta.alerted = true;
-                this.http.post('device/lost', { device: _device }).subscribe(res => {
-                    console.log('device lost successfully sent');
-                }, err => {
-                    console.error('device lost error', err);
-                })
-                this.alert.outOfRange(_device);
+                console.log('meta?', meta);
+                if (meta && !meta.alerted) {
+                    _device.meta.alerted = true;
+                    // this.http.post('device/lost', { device: _device }).subscribe(res => {
+                    //     console.log('device lost successfully sent');
+                    // }, err => {
+                    //     console.error('device lost error', err);
+                    // })
+                    console.log('outOfRANGE');
+                    this.alert.outOfRange(_device);
+                }
             } else {
-                if (_device.meta['timestamp'] && ((Date.now() - _device.meta['timestamp']) > POSSIBLE_TIMEOUT)) {
+                if (_device.meta.updated && ((Date.now() - _device.meta.updated) > POSSIBLE_TIMEOUT)) {
+                    console.log('lostConnection');
                     this.alert.lostConnection(_device);
-                } else _device.meta['timestamp'] = Date.now();
+                } else {
+                    // console.log('set position?');
+                    if (this.geo.getCurrentPosition()) {
+                        // console.log('getCurrentPosition' + JSON.stringify(this.geo.getCurrentPosition()));
+                        _device.meta.gps = this.geo.getCurrentPosition();
+                    }
+                    _device.meta.alerted = false;
+                    _device.meta.updated = Date.now();
+                }
             }
         }
 
 
-
+        console.log('processDevice done');
         return _device;
     }
     //end measurements and helpers
@@ -275,12 +290,15 @@ export class BTService implements OnInit {
 
 
     //onetime methods
-    public init(): Observable<any> {
+    public init(): Observable<MyDevicesScan> {
         return new Observable(observer => {
+            console.log('BT init triggered');
             this.getData().subscribe(res => {
                 this.initScan();
+                console.log('getData subscribe');
                 observer.next(res);
             }, err => {
+                console.log('getData error');
                 observer.error(err);
             })
         })
@@ -288,42 +306,118 @@ export class BTService implements OnInit {
     }
 
     private getData(): Observable<MyDevicesScan> {
-        return Observable.forkJoin([
-            this.http.get('devices/list').map(res => res),
-            this.http.get('devices/META').map(res => res)
-        ]).map((data: [[BTDevice], [deviceMETA]]) => {
-            console.log('getData res', data);
-            data[0].forEach((device: BTDevice) => {
-                this.myDevices[device.id] = device;
-                this.connectedMapping.push(device.id);
-            }) 
-            data[1].forEach((meta: deviceMETA) => {
-                this.myDevices_meta[meta.id] = meta;
-            }) 
-            console.log('WHAT WE HAVE GOT' + JSON.stringify(data));
-            let result: MyDevicesScan = {
-                devices: this.myDevices,
-                devices_meta: this.myDevices_meta,
-                mapping: this.connectedMapping
-            }
-            return result;
+
+
+        return new Observable(observer => {
+            let done: number = 0;
+            let data: any = {};
+            this.http.get('devices/list').subscribe((devices: Array<BTDevice>) => {
+                console.log('got return from devices/list ' + JSON.stringify(devices));
+                devices.forEach((device: BTDevice) => {
+                    console.log('devices FOR EACH');
+                    this.myDevices[device.id] = device;
+                    this.connectedMapping.push(device.id);
+                })
+
+                data['devices'] = this.myDevices;
+
+                data['mapping'] = this.connectedMapping;
+
+                if (++done == 2) observer.next(data);
+            }, err => {
+                observer.error(err);
+            });
+
+            this.http.get('devices/META').subscribe((devices: Array<deviceMETA>) => {
+                devices.forEach((meta: deviceMETA) => {
+                    this.myDevices_meta[meta.id] = meta;
+                })
+                console.log('got meta, done = ' + done);
+                data['devices_meta'] = this.myDevices_meta;
+                if (++done == 2) observer.next(data);
+            }, err => {
+                observer.error(err);
+            });
+
         })
+
+        // return this.http.get('devices/list')
+        // .merge(this.http.get('devices/META')).map((data: [[BTDevice], [deviceMETA]]) => {
+        //     console.log('getData res', data);
+        //     data[0].forEach((device: BTDevice) => {
+        //         this.myDevices[device.id] = device;
+        //         this.connectedMapping.push(device.id);
+        //     }) 
+        //     data[1].forEach((meta: deviceMETA) => {
+        //         this.myDevices_meta[meta.id] = meta;
+        //     }) 
+        //     console.log('WHAT WE HAVE GOT' + JSON.stringify(data));
+        //     let result: MyDevicesScan = {
+        //         devices: this.myDevices,
+        //         devices_meta: this.myDevices_meta,
+        //         mapping: this.connectedMapping
+        //     }
+        //     return result;
+        // })
+
+
+        // return Observable.forkJoin([
+        //     this.http.get('devices/list').map(res => res),
+        //     this.http.get('devices/META').map(res => res)
+        // ]).map((data: [[BTDevice], [deviceMETA]]) => {
+        //     console.log('getData res', data);
+        //     data[0].forEach((device: BTDevice) => {
+        //         this.myDevices[device.id] = device;
+        //         this.connectedMapping.push(device.id);
+        //     }) 
+        //     data[1].forEach((meta: deviceMETA) => {
+        //         this.myDevices_meta[meta.id] = meta;
+        //     }) 
+        //     console.log('WHAT WE HAVE GOT' + JSON.stringify(data));
+        //     let result: MyDevicesScan = {
+        //         devices: this.myDevices,
+        //         devices_meta: this.myDevices_meta,
+        //         mapping: this.connectedMapping
+        //     }
+        //     return result;
+        // })
     }
 
     private initScan(filter: Array<string> = this.connectedMapping) {
-        this.ble.startScan(filter).subscribe((device: BTDevice) => {
-            this.deviceScanned.emit(this.processDevice(device));
+        console.log('INIT SCAN');
+        this.ble.startScan([]).subscribe((device: BTDevice) => {
+            // console.log('startScan hit ' + device.id);
+            
+            let _device = this.processDevice(device, this.myDevices_meta[device.id]);
+            if (_device) {
+                this.myDevices[_device['id']] = _device.bt;
+                this.myDevices_meta[_device['id']] = _device.meta;
+                this.deviceScanned.emit(_device);
+            }
+
+             
         }, err => {
             console.error('error scanning', err);
         })
     }
 
+    private checkConnected() {
+        this.connectedMapping.forEach(device_id => {
+            if(!this.devices_meta[device_id].updated || Date.now() - this.devices_meta[device_id].updated < POSSIBLE_TIMEOUT) {
+                let _device = {
+                    bt: this.devices[device_id],
+                    meta: this.devices_meta[device_id]
+                }
+                this.alert.lostConnection(_device);
+            }
+        })
+    }
 
     public stopscan() {
         this.ble.stopScan();
     }
     //end onetime methods
- 
+
     //emitters and subscribables
     public scanAllDevices(): Observable<BTScan> {
         return new Observable(observer => {
