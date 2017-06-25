@@ -19,8 +19,8 @@ export class DevicePage implements OnInit {
     private bt: BTService,
     private navParams: NavParams
   ) {
-    this.device.bt = this.navParams.get('device');
-    this.device.meta = this.navParams.get('meta');
+    this.device = this.navParams.get('device');
+    console.log('DEVICE PAGE OPEN', this.device);
   }
 
   ngOnInit() {
@@ -32,7 +32,7 @@ export class DevicePage implements OnInit {
     this._GoogleMap.$mapReady.subscribe(map => {
       this.map_model.init(map);
 
-    });
+    }); 
   }
 
   // implements OnInit {

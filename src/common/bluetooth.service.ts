@@ -289,16 +289,17 @@ export class BTService implements OnInit {
 
     private getData(): Observable<MyDevicesScan> {
         return Observable.forkJoin([
-            this.http.get('devices/list'),
-            this.http.get('devices/META')
+            this.http.get('devices/list').map(res => res),
+            this.http.get('devices/META').map(res => res)
         ]).map((data: [[BTDevice], [deviceMETA]]) => {
+            console.log('getData res', data);
             data[0].forEach((device: BTDevice) => {
                 this.myDevices[device.id] = device;
                 this.connectedMapping.push(device.id);
-            })
+            }) 
             data[1].forEach((meta: deviceMETA) => {
                 this.myDevices_meta[meta.id] = meta;
-            })
+            }) 
             console.log('WHAT WE HAVE GOT' + JSON.stringify(data));
             let result: MyDevicesScan = {
                 devices: this.myDevices,

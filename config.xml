@@ -3,7 +3,7 @@
   <name>wt-bt</name>
   <description>WT BT</description>
   <author email="sergeev.maxs@gmail.com" href="http://maxs.rocks/">Sergeev Maxs</author>
-  <content src="http://192.168.0.3:8100" original-src="index.html"/>
+  <content src="index.html"/>
   <access origin="*"/>
   <allow-navigation href="*"/>
   <allow-navigation href="http://172.20.10.2:8100"/>
