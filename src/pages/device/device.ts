@@ -1,4 +1,4 @@
-import { BTService } from './../../common/bluetooth.service';
+import { BTService, device } from './../../common/bluetooth.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavController, Range, NavParams, LoadingController } from 'ionic-angular';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -10,8 +10,32 @@ import { Geolocation } from '@ionic-native/geolocation';
   selector: 'device-page',
   templateUrl: 'device.html'
 })
-export class DevicePage {
-// implements OnInit {
+export class DevicePage implements OnInit {
+  private device: device;
+  @ViewChild(GoogleMap) _GoogleMap: GoogleMap;
+  map_model: MapsModel = new MapsModel();
+
+  constructor(
+    private bt: BTService,
+    private navParams: NavParams
+  ) {
+    this.device.bt = this.navParams.get('device');
+    this.device.meta = this.navParams.get('meta');
+  }
+
+  ngOnInit() {
+    this.bt.deviceScanned.subscribe((device: device) => {
+      if (device.bt.id == this.device.bt.id) {
+        this.device = device;
+      }
+    })
+    this._GoogleMap.$mapReady.subscribe(map => {
+      this.map_model.init(map);
+
+    });
+  }
+
+  // implements OnInit {
   // rangeForm: any;
   // checkboxForm: FormGroup;
   // radioForm: FormGroup;
@@ -33,16 +57,13 @@ export class DevicePage {
   //     this.device = devices[this.device['id']];
   //     console.log(this.device, 'DEVICE UPDATE');
   //   })
-  //   this._GoogleMap.$mapReady.subscribe(map => {
-  //     this.map_model.init(map);
-      
-  //   });
+    
 
 
   // }
 
-  // @ViewChild(GoogleMap) _GoogleMap: GoogleMap;
-  // map_model: MapsModel = new MapsModel();
+
+
 
 
 
@@ -54,11 +75,11 @@ export class DevicePage {
 
   //   this.geolocation.getCurrentPosition().then((position) => {
   //     let current_location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      
-      
+
+
   //     env.map_model.using_geolocation = true;
   //     env.map_model.map.setCenter(current_location);      
-      
+
   //   }).catch((error) => {
   //     console.log('Error getting location', error);      
   //   });

@@ -22,10 +22,10 @@ export class HttpService {
     ) {
         if (!this.platform.is('cordova')) {
             this.baseUrl = "http://62.109.16.138:1337";
-        }
+        } else this.baseUrl = baseUrl;
     }
 
-    private baseUrl: string = baseUrl;
+    private baseUrl: string;
     private cachedToken: string = '';
 
     public get(url: string, options?: RequestOptionsArgs, ignoreBaseUrl: boolean = false) {

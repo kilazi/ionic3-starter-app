@@ -1,3 +1,4 @@
+import { MyDevicesPage } from './../pages/my-devices/my-devices';
 import { AllDevicesPage } from './../pages/all-devices/all-devices';
 import { MapsPage } from './../pages/maps/maps';
 import { BTService } from './../common/bluetooth.service';
@@ -49,7 +50,7 @@ export class MyApp {
     });
 
     this.pages = [
-      { title: 'Connect Devices', icon: 'create', component: ListingPage },
+      { title: 'Devices', icon: 'create', component: MyDevicesPage },
       // { title: 'My Devices', icon: 'home', component: FormsPage },
       // { title: 'Functionalities', icon: 'code', component: FunctionalitiesPage }
     ];
@@ -64,10 +65,13 @@ export class MyApp {
     //   res['connectedMapping'].forEach(id => this.bt.connectBLE(id)) 
     // })
 
+    
+    
+
     this.authService.checkToken().subscribe(() => {
       console.log('token recognised');
       // setTimeout(() => 
-      this.nav.setRoot(AllDevicesPage), 300
+      this.nav.setRoot(MyDevicesPage), 300
       // );
     }, () => {
       

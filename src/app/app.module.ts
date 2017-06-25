@@ -1,3 +1,4 @@
+import { MyDevicesPage } from './../pages/my-devices/my-devices';
 import { AllDevicesPage } from './../pages/all-devices/all-devices';
 import { GeolocationService } from './../common/geolocations.service';
 import { DevicePage } from './../pages/device/device';
@@ -84,7 +85,8 @@ import { IonicStorageModule } from '@ionic/storage';
     NonamePipe,
     TimePipe,
     DevicePage,
-    AllDevicesPage
+    AllDevicesPage,
+    MyDevicesPage
   ],
   imports: [
     BrowserModule,
@@ -106,7 +108,8 @@ import { IonicStorageModule } from '@ionic/storage';
     FacebookLoginPage,
     GoogleLoginPage,
     DevicePage,
-    AllDevicesPage
+    AllDevicesPage,
+    MyDevicesPage
   ],
   providers: [
     NotificationsService,

@@ -1,3 +1,4 @@
+import { deviceMETA } from './bluetooth.service';
 import { GeolocationService } from './geolocations.service';
 import { AlertService } from './alert.service';
 import { GlobalService } from './global.service';
@@ -126,13 +127,14 @@ const RANGE = {
 }
 @Injectable()
 export class BTService implements OnInit {
-    public devices: { [key: string]: BTDevice } = {};
-    public myDevices: { [key: string]: BTDevice } = {};
-    public devices_meta: { [key: string]: deviceMETA } = {};
-    public myDevices_meta: { [key: string]: deviceMETA } = {};
-    public mapping: Array<string> = [];
-    public connectedMapping: Array<string> = [];
-    public updatedMETA: EventEmitter<any>;
+    public deviceScanned: EventEmitter<device>;
+
+    private devices: { [key: string]: BTDevice } = {};
+    private myDevices: { [key: string]: BTDevice } = {};
+    private devices_meta: { [key: string]: deviceMETA } = {};
+    private myDevices_meta: { [key: string]: deviceMETA } = {};
+    private mapping: Array<string> = [];
+    private connectedMapping: Array<string> = [];
 
     constructor(
         private ble: BLE,
@@ -141,15 +143,18 @@ export class BTService implements OnInit {
         private alert: AlertService,
         private geo: GeolocationService
     ) {
-        this.updatedMETA = new EventEmitter();
+        this.deviceScanned = new EventEmitter<device>();
     }
 
     ngOnInit() { }
 
     //setters
-    public setType(device_id, type): void {
-        this.devices[device_id]['range_type'] = type;
-        // this.searchDevices(false);
+    public setType(device_id, type): Observable<device> {
+        return new Observable(observer => {
+            this.myDevices_meta[device_id].type = type;
+            let _device: device = this.processDevice(this.myDevices[device_id]);
+            observer.next(_device);
+        })
     }
     //end setters
 
@@ -191,9 +196,9 @@ export class BTService implements OnInit {
         return 0;
     }
 
-    private connectDevice(device: BTDevice): Observable<any> {
+    public connectDevice(device: BTDevice): Observable<any> {
         return new Observable(observer => {
-            this.http.post('devices/add', device).subscribe(() => {
+            this.http.post('devices/add', {device:device, device_meta: this.getMeta(device)}).subscribe(() => {
                 if (this.connectedMapping.indexOf(device.id) >= 0) observer.error('Trying to connect device which is already on the list.');
                 if (this.mapping.indexOf(device.id) == -1) observer.error('Could not find device, please try again.');
 
@@ -202,15 +207,26 @@ export class BTService implements OnInit {
 
                 this.connectedMapping.push(device.id);
                 this.myDevices[device.id] = device;
-
-                let _device = this.processDevice(device);
+ 
+                let _device: device = this.processDevice(device);
 
                 this.myDevices[device.id] = _device.bt;
                 this.myDevices_meta[device.id] = _device.meta;
 
-                this.updatedMETA.emit(_device);                
+                observer.next();
             }, err => observer.error(err));
         })
+    }
+
+    public getMeta(device: BTDevice): deviceMETA {
+        let meta: deviceMETA = {
+            id: device.id
+        }
+        if (!meta.type) meta.type = 'pocket';
+        meta.distance = this.measureDistance(device.rssi);
+        meta.rangeCondition = this.rangeCondition(meta.type, meta.distance);
+
+        return meta;
     }
 
 
@@ -231,7 +247,7 @@ export class BTService implements OnInit {
 
         //small hack because of iOS bug showing rssi 127 for no reason. whenever we get that, just ignoring and not updating range.
         if (device.rssi != 127) {
-            _device.meta.distance = this.measureDistance(device.rssi);
+            _device.meta = this.getMeta(device);
             if (_device.meta.distance > RANGE[_device.meta.type][0][0]) {
                 if (this.geo.getCurrentPosition() !)
                     _device.meta.gps = this.geo.getCurrentPosition();
@@ -250,7 +266,7 @@ export class BTService implements OnInit {
             }
         }
 
-        _device.meta.rangeCondition = this.rangeCondition(_device.meta.type, _device.meta.distance);
+
 
         return _device;
     }
@@ -263,7 +279,7 @@ export class BTService implements OnInit {
         return new Observable(observer => {
             this.getData().subscribe(res => {
                 this.initScan();
-                observer.next();
+                observer.next(res);
             }, err => {
                 observer.error(err);
             })
@@ -271,7 +287,7 @@ export class BTService implements OnInit {
 
     }
 
-    public getData(): Observable<MyDeviceScan> {
+    private getData(): Observable<MyDevicesScan> {
         return Observable.forkJoin([
             this.http.get('devices/list'),
             this.http.get('devices/META')
@@ -283,6 +299,7 @@ export class BTService implements OnInit {
             data[1].forEach((meta: deviceMETA) => {
                 this.myDevices_meta[meta.id] = meta;
             })
+            console.log('WHAT WE HAVE GOT' + JSON.stringify(data));
             let result: MyDevicesScan = {
                 devices: this.myDevices,
                 devices_meta: this.myDevices_meta,
@@ -292,9 +309,9 @@ export class BTService implements OnInit {
         })
     }
 
-    public initScan(filter: Array<string> = this.connectedMapping) {
+    private initScan(filter: Array<string> = this.connectedMapping) {
         this.ble.startScan(filter).subscribe((device: BTDevice) => {
-            this.updatedMETA.emit(this.processDevice(device));
+            this.deviceScanned.emit(this.processDevice(device));
         }, err => {
             console.error('error scanning', err);
         })
@@ -305,7 +322,7 @@ export class BTService implements OnInit {
         this.ble.stopScan();
     }
     //end onetime methods
-
+ 
     //emitters and subscribables
     public scanAllDevices(): Observable<BTScan> {
         return new Observable(observer => {
@@ -313,7 +330,7 @@ export class BTService implements OnInit {
                 // this.mapping = this.mapping.sort((a, b) => this.sort(a, b));
                 // this.updatedMETA.emit(this.devices);
                 this.devices[device.id] = device;
-                if(this.mapping.indexOf(device.id)>=0) this.mapping.push(device.id);
+                if (this.mapping.indexOf(device.id) == -1 && this.connectedMapping.indexOf(device.id) == -1) this.mapping.push(device.id);
                 let _device: BTScan = {
                     devices_bt: this.devices,
                     mapping: this.mapping
@@ -323,6 +340,14 @@ export class BTService implements OnInit {
                 observer.error(err);
             })
         })
+    }
+
+    public getMyDevices(): MyDevicesScan {
+        return {
+            devices: this.myDevices,
+            devices_meta: this.myDevices_meta,
+            mapping: this.connectedMapping
+        };
     }
 
     // public scanMyDevices(): Observable<MyDeiceScan> {

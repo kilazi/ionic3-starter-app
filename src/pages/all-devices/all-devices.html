@@ -10,11 +10,11 @@
     <ion-list inset>
         <ng-template ngFor let-id [ngForOf]="mapping">
             <button ion-item *ngIf="devices[id]" (click)="connect(devices[id])">
-                {{ devices[id].name }}
+                <span *ngIf="devices[id].name">{{ devices[id].name }}</span>
+                <span *ngIf="!devices[id].name">{{ id }}</span>
             </button>
         </ng-template>
         <button ion-button full (click)="update()">Scan</button>
-
     </ion-list>
 
 </ion-content>

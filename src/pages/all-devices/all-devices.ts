@@ -1,3 +1,4 @@
+import { NavController } from 'ionic-angular';
 import { GlobalService } from './../../common/global.service';
 import { BTService, BTDevice } from './../../common/bluetooth.service';
 import { Component, OnInit } from '@angular/core';
@@ -6,20 +7,21 @@ import { Component, OnInit } from '@angular/core';
     templateUrl: './all-devices.html'
 })
 export class AllDevicesPage implements OnInit {
-    private devices: {[key: string]: BTDevice} = {};
+    private devices: { [key: string]: BTDevice } = {};
     private mapping: Array<string> = [];
     constructor(
         private bt: BTService,
-        private gs: GlobalService
-    ){}
+        private gs: GlobalService,
+        private nav: NavController
+    ) { }
 
     ngOnInit() {
-        this.getInfo();
+        this.getInfo(); 
     }
-    
+
 
     getInfo() {
-        this.bt.scanAllDevices().subscribe(res => { 
+        this.bt.scanAllDevices().subscribe(res => {
             console.log(res, 'scan res');
             this.devices = res.devices_bt;
             this.mapping = res.mapping;
@@ -33,6 +35,10 @@ export class AllDevicesPage implements OnInit {
     }
 
     connect(device) {
-        this.gs.simplePrompt(() => console.log('connect ', device));
+        this.gs.simplePrompt(() =>
+            this.bt.connectDevice(device).subscribe(res => {
+                this.nav.pop();
+            })
+        );
     }
 }

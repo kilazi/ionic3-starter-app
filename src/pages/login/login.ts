@@ -1,3 +1,4 @@
+import { MyDevicesPage } from './../my-devices/my-devices';
 import { AllDevicesPage } from './../all-devices/all-devices';
 import { GlobalService } from './../../common/global.service';
 import { AuthService } from './../../common/auth.service';
@@ -34,7 +35,7 @@ export class LoginPage {
     public gs: GlobalService,
     public jwt: JwtHelper
   ) {
-    this.main_page = { component: AllDevicesPage };
+    this.main_page = { component: MyDevicesPage };
 
     this.login = new FormGroup({
       email: new FormControl('', Validators.required),
