@@ -1,3 +1,4 @@
+import { GeolocationService } from './../common/geolocations.service';
 import { DevicePage } from './../pages/device/device';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AlertService } from './../common/alert.service';
@@ -190,7 +191,8 @@ import { IonicStorageModule } from '@ionic/storage';
     HttpService,
     BTService,
     AlertService,
-    LocalNotifications
+    LocalNotifications,
+    GeolocationService
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
