@@ -1,3 +1,4 @@
+import { AllDevicesPage } from './../all-devices/all-devices';
 import { GlobalService } from './../../common/global.service';
 import { AuthService } from './../../common/auth.service';
 import { HttpService } from './../../common/http.service';
@@ -5,7 +6,7 @@ import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 
-import { TabsNavigationPage } from '../tabs-navigation/tabs-navigation';
+// import { TabsNavigationPage } from '../tabs-navigation/tabs-navigation';
 import { SignupPage } from '../signup/signup';
 import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 
@@ -33,7 +34,7 @@ export class LoginPage {
     public gs: GlobalService,
     public jwt: JwtHelper
   ) {
-    this.main_page = { component: TabsNavigationPage };
+    this.main_page = { component: AllDevicesPage };
 
     this.login = new FormGroup({
       email: new FormControl('', Validators.required),

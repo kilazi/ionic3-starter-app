@@ -1,3 +1,4 @@
+import { AllDevicesPage } from './../pages/all-devices/all-devices';
 import { MapsPage } from './../pages/maps/maps';
 import { BTService } from './../common/bluetooth.service';
 import { LoginPage } from './../pages/login/login';
@@ -9,12 +10,8 @@ import { Platform, MenuController, Nav, App } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { baseUrl } from '../common/environment';
-import { TabsNavigationPage } from '../pages/tabs-navigation/tabs-navigation';
-import { FormsPage } from '../pages/forms/forms';
-import { LayoutsPage } from '../pages/layouts/layouts';
 import { WalkthroughPage } from '../pages/walkthrough/walkthrough';
 import { SettingsPage } from '../pages/settings/settings';
-import { FunctionalitiesPage } from '../pages/functionalities/functionalities';
 
 
 @Component({
@@ -53,24 +50,24 @@ export class MyApp {
 
     this.pages = [
       { title: 'Connect Devices', icon: 'create', component: ListingPage },
-      { title: 'My Devices', icon: 'home', component: FormsPage },
+      // { title: 'My Devices', icon: 'home', component: FormsPage },
       // { title: 'Functionalities', icon: 'code', component: FunctionalitiesPage }
     ];
 
     this.pushPages = [
-      { title: 'Layouts', icon: 'grid', component: LayoutsPage },
+      // { title: 'Layouts', icon: 'grid', component: LayoutsPage },
       { title: 'Maps', icon: 'grid', component: MapsPage },
       { title: 'Settings', icon: 'settings', component: SettingsPage }
     ];
-
-    this.bt.showMyDevices().subscribe(res => {
-      res['connectedMapping'].forEach(id => this.bt.connectBLE(id)) 
-    })
+ 
+    // this.bt.showMyDevices().subscribe(res => {
+    //   res['connectedMapping'].forEach(id => this.bt.connectBLE(id)) 
+    // })
 
     this.authService.checkToken().subscribe(() => {
       console.log('token recognised');
       // setTimeout(() => 
-      this.nav.setRoot(TabsNavigationPage), 300
+      this.nav.setRoot(AllDevicesPage), 300
       // );
     }, () => {
       

@@ -2,15 +2,11 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, LoadingController } from 'ionic-angular';
 import { FormGroup, FormControl } from '@angular/forms';
 
-import { TermsOfServicePage } from '../terms-of-service/terms-of-service';
-import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
 
 import { WalkthroughPage } from '../walkthrough/walkthrough';
 
 import 'rxjs/Rx';
 
-import { ProfileModel } from '../profile/profile.model';
-import { ProfileService } from '../profile/profile.service';
 
 @Component({
   selector: 'settings-page',
@@ -21,13 +17,11 @@ export class SettingsPage {
   // make WalkthroughPage the root (or first) page
   rootPage: any = WalkthroughPage;
   loading: any;
-  profile: ProfileModel = new ProfileModel();
 
   constructor(
     public nav: NavController,
     public modal: ModalController,
-    public loadingCtrl: LoadingController,
-    public profileService: ProfileService
+    public loadingCtrl: LoadingController
   ) {
     this.loading = this.loadingCtrl.create();
 
@@ -43,22 +37,22 @@ export class SettingsPage {
 
   ionViewDidLoad() {
     this.loading.present();
-    this.profileService
-      .getData()
-      .then(data => {
-        this.profile.user = data.user;
+    // this.profileService
+      // .getData()
+      // .then(data => {
+        // this.profile.user = data.user;
 
-        this.settingsForm.setValue({
-          name: data.user.name,
-          location: data.user.location,
-          description: data.user.about,
-          currency: 'dollar',
-          weather: 'fahrenheit',
-          notifications: true
-        });
+      //   this.settingsForm.setValue({
+      //     name: data.user.name,
+      //     location: data.user.location,
+      //     description: data.user.about,
+      //     currency: 'dollar',
+      //     weather: 'fahrenheit',
+      //     notifications: true
+      //   });
 
-        this.loading.dismiss();
-      });
+      //   this.loading.dismiss();
+      // });
   }
 
   logout() {
@@ -66,13 +60,4 @@ export class SettingsPage {
     this.nav.setRoot(this.rootPage);
   }
 
-  showTermsModal() {
-    let modal = this.modal.create(TermsOfServicePage);
-    modal.present();
-  }
-
-  showPrivacyModal() {
-    let modal = this.modal.create(PrivacyPolicyPage);
-    modal.present();
-  }
 }

@@ -1,14 +1,10 @@
+import { AllDevicesPage } from './../all-devices/all-devices';
 import { JwtHelper } from 'angular2-jwt';
 import { GlobalService } from './../../common/global.service';
 import { AuthService } from './../../common/auth.service';
 import { Component } from '@angular/core';
 import { NavController, ModalController, LoadingController } from 'ionic-angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
-
-import { TermsOfServicePage } from '../terms-of-service/terms-of-service';
-import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
-
-import { TabsNavigationPage } from '../tabs-navigation/tabs-navigation';
 
 import { FacebookLoginService } from '../facebook-login/facebook-login.service';
 import { GoogleLoginService } from '../google-login/google-login.service';
@@ -32,7 +28,7 @@ export class SignupPage {
     public gs: GlobalService,
     public jwt: JwtHelper
   ) {
-    this.main_page = { component: TabsNavigationPage };
+    this.main_page = { component: AllDevicesPage };
 
     this.signup = new FormGroup({
       email: new FormControl('', Validators.required),
@@ -135,14 +131,14 @@ export class SignupPage {
       });
   }
 
-  showTermsModal() {
-    let modal = this.modal.create(TermsOfServicePage);
-    modal.present();
-  }
+  // showTermsModal() {
+  //   let modal = this.modal.create(TermsOfServicePage);
+  //   modal.present();
+  // }
 
-  showPrivacyModal() {
-    let modal = this.modal.create(PrivacyPolicyPage);
-    modal.present();
-  }
+  // showPrivacyModal() {
+  //   let modal = this.modal.create(PrivacyPolicyPage);
+  //   modal.present();
+  // }
 
 }

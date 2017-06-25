@@ -180,11 +180,11 @@ export class BTService implements OnInit {
     }
 
     private sort(a, b, backwards = false): number {
-        if (this.devices_meta[a].distance < this.devices_meta[b].distance)
+        if (this.myDevices_meta[a].distance < this.myDevices_meta[b].distance)
             if (backwards)
                 return 1;
             else return -1;
-        if (this.devices_meta[a].distance > this.devices_meta[b].distance)
+        if (this.myDevices_meta[a].distance > this.myDevices_meta[b].distance)
             if (backwards)
                 return -1;
             else return 1;
@@ -203,7 +203,12 @@ export class BTService implements OnInit {
                 this.connectedMapping.push(device.id);
                 this.myDevices[device.id] = device;
 
-                this.processDevice(device);
+                let _device = this.processDevice(device);
+
+                this.myDevices[device.id] = _device.bt;
+                this.myDevices_meta[device.id] = _device.meta;
+
+                this.updatedMETA.emit(_device);                
             }, err => observer.error(err));
         })
     }
@@ -228,11 +233,11 @@ export class BTService implements OnInit {
         if (device.rssi != 127) {
             _device.meta.distance = this.measureDistance(device.rssi);
             if (_device.meta.distance > RANGE[_device.meta.type][0][0]) {
-                if(this.geo.getCurrentPosition()!)
-                _device.meta.gps = this.geo.getCurrentPosition();
+                if (this.geo.getCurrentPosition() !)
+                    _device.meta.gps = this.geo.getCurrentPosition();
                 _device.meta.offline = true;
                 _device.meta.alerted = true;
-                this.http.post('device/lost', {device: _device}).subscribe(res => {
+                this.http.post('device/lost', { device: _device }).subscribe(res => {
                     console.log('device lost successfully sent');
                 }, err => {
                     console.error('device lost error', err);
@@ -245,53 +250,9 @@ export class BTService implements OnInit {
             }
         }
 
-
-        _device.meta.distance
-
         _device.meta.rangeCondition = this.rangeCondition(_device.meta.type, _device.meta.distance);
 
-        this.myDevices[device.id] = _device.bt;
-        this.myDevices_meta[device.id] = _device.meta;
-
-
-
-
-        res['distance'] = this.measureDistance(res['rssi']);
-        if (!this.devices[res['id']] || (this.devices[res['id']] && !this.devices[res['id']]['type'])) res['type'] = 'pocket';
-        else res['type'] = this.devices[res['id']]['type'];
-        res['rangeCondition'] = this.rangeCondition(res['type'], res['distance']);
-        if (res['rssi'] != 127 || res['rssi'] == 127 && this.devices[res['id']]) {
-            if (res['rssi'] != 127) {
-                if (myDevices && res['timestamp'] && Date.now() - res['timestamp'] > 10000) {
-                    this.alert.outOfRange(this.devices[res['id']]);
-                    this.localNotifications.schedule({
-                        id: 1,
-                        text: 'Device out of range!',
-                        sound: 'file://sound.mp3'
-                    });
-                } else res['timestamp'] = Date.now()
-                if (this.connectedMapping.indexOf(res['id']) != -1) {
-                    if (res['distance'] > this.range) {
-                        if (!res['outOfRange']) {
-                            this.alert.outOfRange(res);
-                            this.localNotifications.schedule({
-                                id: 1,
-                                text: 'Device out of range!',
-                                sound: 'file://sound.mp3'
-                            });
-                        }
-                        res['outOfRange'] = true;
-                    } else if (Date.now() - res['timestamp'] <= 10000) {
-                        res['outOfRange'] = false;
-                    }
-                }
-                this.devices[res['id']] = res;
-            }
-            if (this.mapping.indexOf(res['id']) == -1 && this.connectedMapping.indexOf(res['id']) == -1) {
-                this.mapping.push(res['id']);
-            }
-        }
-        return res;
+        return _device;
     }
     //end measurements and helpers
 
@@ -348,14 +309,16 @@ export class BTService implements OnInit {
     //emitters and subscribables
     public scanAllDevices(): Observable<BTScan> {
         return new Observable(observer => {
-            this.ble.scan([], 2).subscribe((res: BTDevice) => {
-                this.mapping = this.mapping.sort((a, b) => this.sort(a, b));
-                this.updatedMETA.emit(this.devices);
-                let result: BTScan = {
+            this.ble.scan([], 2).subscribe((device: BTDevice) => {
+                // this.mapping = this.mapping.sort((a, b) => this.sort(a, b));
+                // this.updatedMETA.emit(this.devices);
+                this.devices[device.id] = device;
+                if(this.mapping.indexOf(device.id)>=0) this.mapping.push(device.id);
+                let _device: BTScan = {
                     devices_bt: this.devices,
                     mapping: this.mapping
                 }
-                observer.next(result);
+                observer.next(_device);
             }, err => {
                 observer.error(err);
             })
@@ -425,34 +388,34 @@ export class BTService implements OnInit {
 
 
 
-    showMyDevices() {
+    // showMyDevices() {
 
-        //console.log('showMyDevices called');
-        return new Observable(observer => {
-            this.http.get('devices/list').subscribe((res: any) => {
-                //console.log('showMyDevices', res);
-                res.forEach((device, index) => {
-                    //console.log('forEach my devices', device);
-                    // if(this.devices[device['id']]) online.push(device['id']);
-                    if (!this.devices[device['id']] && device['id']) {
-                        device['offline'] = true;
-                        device['distance'] = 1337;
-                        this.devices[device['id']] = device;
-                        this.connectedMapping.push(device['id']);
+    //     //console.log('showMyDevices called');
+    //     return new Observable(observer => {
+    //         this.http.get('devices/list').subscribe((res: any) => {
+    //             //console.log('showMyDevices', res);
+    //             res.forEach((device, index) => {
+    //                 //console.log('forEach my devices', device);
+    //                 // if(this.devices[device['id']]) online.push(device['id']);
+    //                 if (!this.devices[device['id']] && device['id']) {
+    //                     device['offline'] = true;
+    //                     device['distance'] = 1337;
+    //                     this.devices[device['id']] = device;
+    //                     this.connectedMapping.push(device['id']);
 
-                    } else {
-                        this.moveDeviceToConnected(device);
+    //                 } else {
+    //                     this.moveDeviceToConnected(device);
 
-                    }
-                })
+    //                 }
+    //             })
 
-                this.connectedMapping = this.connectedMapping.sort((a, b) => this.sort(a, b));
+    //             // this.connectedMapping = this.connectedMapping.sort((a, b) => this.sort(a, b));
 
-                observer.next({ devices: this.devices, connectedMapping: this.connectedMapping });
-                //console.log(this.mapping, this.connectedMapping);
-            })
-        })
-    }
+    //             observer.next({ devices: this.devices, connectedMapping: this.connectedMapping });
+    //             //console.log(this.mapping, this.connectedMapping);
+    //         })
+    //     })
+    // }
 
     connectBLE(id) {
         // this.ble.connect(id).subscribe(res => {
@@ -476,24 +439,24 @@ export class BTService implements OnInit {
     //     })
     // }
 
-    moveDeviceToConnected(device) {
-        //console.log('moveDeviceToConnected called', device);
-        if (this.connectedMapping.indexOf(device['id']) == -1) {
-            this.connectedMapping.push(device['id']);
-        }
-        if (this.mapping.indexOf(device['id']) != -1) this.mapping.splice(this.mapping.indexOf(device['id']), 1);
-    }
+    // moveDeviceToConnected(device) {
+    //     //console.log('moveDeviceToConnected called', device);
+    //     if (this.connectedMapping.indexOf(device['id']) == -1) {
+    //         this.connectedMapping.push(device['id']);
+    //     }
+    //     if (this.mapping.indexOf(device['id']) != -1) this.mapping.splice(this.mapping.indexOf(device['id']), 1);
+    // }
 
-    disconnectDevice(device_id) {
-        return this.http.post('devices/delete', { device_id: device_id }).map((res: any) => {
-            res = res.json();
-            //console.log('my delete', res);
-            return res;
+    // disconnectDevice(device_id) {
+    //     return this.http.post('devices/delete', { device_id: device_id }).map((res: any) => {
+    //         res = res.json();
+    //         //console.log('my delete', res);
+    //         return res;
 
-        })
-    }
+    //     })
+    // }
 
-    maintainConnection() {
+    // maintainConnection() {
 
-    }
+    // }
 }

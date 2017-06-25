@@ -1,3 +1,4 @@
+import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { Observable } from 'rxjs/Observable';
 import { GlobalService } from './global.service';
 import { Injectable } from '@angular/core';
@@ -14,11 +15,11 @@ export class GeolocationService {
     }
 
     public watch(): void {
-        this.subscription = this.geolocation.watchPosition((position: Position) => {
+        this.subscription = this.geolocation.watchPosition(POSITION_OPTIONS).subscribe((position: Geoposition) => {
             this.coords = position.coords;
         }, err => {
             this.gs.simpleAlert('Could not get your current location. Please turn on GPS in your phone settings to be able to track devices locations.', 'GPS Error')
-        }, POSITION_OPTIONS)
+        })
     }
 
     public getCurrentPosition(): Coordinates {
@@ -28,12 +29,11 @@ export class GeolocationService {
 
     public forceGetCurrentPosition(): Observable<Coordinates> {
         return new Observable(observer => {
-            this.geolocation.getCurrentPosition((position: Position) => {
+            this.geolocation.getCurrentPosition().then((position: Position) => {
                 observer.next(position.coords)
-            }, err => {
+            }).catch(err => {
                 observer.error(err);
             })
-            observer.next();
         })
     }
 
