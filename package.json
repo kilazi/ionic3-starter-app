@@ -16,6 +16,7 @@
     "@angular/http": "4.0.2",
     "@angular/platform-browser": "4.0.2",
     "@angular/platform-browser-dynamic": "4.0.2",
+    "@ionic-native/background-mode": "^3.12.1",
     "@ionic-native/ble": "^3.12.1",
     "@ionic-native/call-number": "3.4.4",
     "@ionic-native/core": "3.6.1",

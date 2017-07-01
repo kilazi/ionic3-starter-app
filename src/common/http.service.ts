@@ -9,6 +9,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Headers, Http, RequestOptionsArgs, URLSearchParams } from '@angular/http';
 import { Storage } from '@ionic/storage';
 @Injectable()
+//main http handler service. handles errors, headers and JwT
 export class HttpService {
     constructor(
         private _http: Http,
@@ -32,7 +33,7 @@ export class HttpService {
 
         return new Observable(observer => {
             this._createAuthorizationHeader(options).subscribe(options => {
-                console.log('Call GET Request: ' + url, options);
+                console.log('Call GET Request: ' + this._generateUrl(url, ignoreBaseUrl), options);
                 this._http
                     .get(this._generateUrl(url, ignoreBaseUrl), options)
                     .map(this._extractData)
@@ -43,7 +44,7 @@ export class HttpService {
                         observer.next(res);
                     }, err => {
                         console.log('Call GET Error: ' + url, err);
-                        observer.error(err);
+                        observer.error(err.json());
                     })
             });
         })
@@ -53,18 +54,18 @@ export class HttpService {
 
         return new Observable(observer => {
             this._createAuthorizationHeader(options).subscribe(options => {
-                console.log('Call POST Request: ' + url, options);
+                console.log('Call POST Request: ' + this._generateUrl(url, ignoreBaseUrl), body, options);
                 this._http
                     .post(this._generateUrl(url, ignoreBaseUrl), body, options)
                     .map(this._extractData)
                     .catch((err: any) => {
                         return this._handleError(err);
                     }).subscribe(res => {
-                        console.log('Call POST Response: ' + url, res);
+                        console.log('Call POST Response: ' + url, res, res.json());
                         observer.next(res);
                     }, err => {
-                        console.log('Call POST Error: ' + url, err);
-                        observer.error(err);
+                        console.log('Call POST Error: ' + url, err, err.json());
+                        observer.error(err.json());
                     })
             });
         })
@@ -85,7 +86,7 @@ export class HttpService {
                         observer.next(res);
                     }, err => {
                         console.log('Call PUT Error: ' + url, err);
-                        observer.error(err);
+                        observer.error(err.json());
                     })
             });
         })
@@ -102,7 +103,7 @@ export class HttpService {
                     }).subscribe(res => {
                         observer.next(res);
                     }, err => {
-                        observer.error(err);
+                        observer.error(err.json());
                     })
             });
         })
@@ -151,6 +152,7 @@ export class HttpService {
     }
 
     private _handleError(err): Observable<any> {
+        console.log('handleError, _handleError', err);
         if (err.status >= 500) {
             this._handleServerError();
             return Observable.throw(null);
@@ -166,7 +168,7 @@ export class HttpService {
                 this._handleServerError();
                 return Observable.throw(null);
             default:
-                break;
+                return Observable.throw(err);
         }
         return Observable.throw(err);
     }

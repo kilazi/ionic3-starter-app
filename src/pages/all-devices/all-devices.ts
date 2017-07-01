@@ -38,6 +38,8 @@ export class AllDevicesPage implements OnInit {
         this.gs.simplePrompt(() =>
             this.bt.connectDevice(device).subscribe(res => {
                 this.nav.pop();
+            }, err => {
+                this.gs.simpleAlert(err.error);
             })
         );
     }

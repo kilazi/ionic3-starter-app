@@ -4,9 +4,10 @@ import { GlobalService } from './global.service';
 import { Injectable } from '@angular/core';
 const POSITION_OPTIONS: PositionOptions = {};
 @Injectable()
+// scans and returns GPS
 export class GeolocationService {
     private subscription;
-    private coords: Coordinates;
+    private coords: google.maps.LatLng;
     constructor(
         private geolocation: Geolocation,
         private gs: GlobalService
@@ -16,21 +17,25 @@ export class GeolocationService {
 
     public watch(): void {
         this.subscription = this.geolocation.watchPosition(POSITION_OPTIONS).subscribe((position: Geoposition) => {
-            this.coords = position.coords;
+            let latLng: google.maps.LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+            this.coords = latLng;
         }, err => {
             this.gs.simpleAlert('Could not get your current location. Please turn on GPS in your phone settings to be able to track devices locations.', 'GPS Error')
         })
     }
 
-    public getCurrentPosition(): Coordinates {
-        if (!this.coords) throw new Error('Coordinates are not set.');
+    public getCurrentPosition(): google.maps.LatLng {
+        if (!this.coords) {
+            console.error('Coordinates are not set.');            
+        }
         return this.coords;
     }
 
-    public forceGetCurrentPosition(): Observable<Coordinates> {
+    public forceGetCurrentPosition(): Observable<google.maps.LatLng> {
         return new Observable(observer => {
             this.geolocation.getCurrentPosition().then((position: Position) => {
-                observer.next(position.coords)
+                let latLng: google.maps.LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                observer.next(latLng);
             }).catch(err => {
                 observer.error(err);
             })

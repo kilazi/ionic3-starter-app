@@ -1,3 +1,4 @@
+import { BackgroundMode } from '@ionic-native/background-mode';
 import { GeolocationService } from './../common/geolocations.service';
 import { MyDevicesPage } from './../pages/my-devices/my-devices';
 import { AllDevicesPage } from './../pages/all-devices/all-devices';
@@ -42,7 +43,8 @@ export class MyApp {
     public http: HttpService,
     public auth: AuthService,
     public bt: BTService,
-    public geo: GeolocationService
+    public geo: GeolocationService,
+    private backgroundMode: BackgroundMode
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -50,6 +52,7 @@ export class MyApp {
       this.splashScreen.hide();
       this.statusBar.styleDefault();
       this.geo.watch();
+      this.backgroundMode.enable();
     });
 
     this.pages = [

@@ -1,3 +1,7 @@
+import { SafeHeavenService } from './../common/safeheaven.service';
+import { SafeHeavenDetailPage } from './../pages/safe-heaven/safe-heaven.detail/safe-heaven.detail';
+import { SafeHeavenCreatePage } from './../pages/safe-heaven/safe-heaven.create/safe-heaven.create';
+import { SafeHeavenPage } from './../pages/safe-heaven/safe-heaven';
 import { MyDevicesPage } from './../pages/my-devices/my-devices';
 import { AllDevicesPage } from './../pages/all-devices/all-devices';
 import { GeolocationService } from './../common/geolocations.service';
@@ -6,7 +10,6 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AlertService } from './../common/alert.service';
 import { TimePipe } from './../common/time.pipe';
 import { BTService } from './../common/bluetooth.service';
-import { IBeacon } from '@ionic-native/ibeacon';
 import { NonamePipe } from './../common/noname.pipe';
 import { BLE } from '@ionic-native/ble';
 import { JwtHelper } from 'angular2-jwt';
@@ -60,6 +63,8 @@ import { GoogleMapsService } from '../pages/maps/maps.service';
 
 import { IonicStorageModule } from '@ionic/storage';
 
+import { BackgroundMode } from '@ionic-native/background-mode';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -86,7 +91,10 @@ import { IonicStorageModule } from '@ionic/storage';
     TimePipe,
     DevicePage,
     AllDevicesPage,
-    MyDevicesPage
+    MyDevicesPage,
+    SafeHeavenPage,
+    SafeHeavenCreatePage,
+    SafeHeavenDetailPage
   ],
   imports: [
     BrowserModule,
@@ -109,7 +117,10 @@ import { IonicStorageModule } from '@ionic/storage';
     GoogleLoginPage,
     DevicePage,
     AllDevicesPage,
-    MyDevicesPage
+    MyDevicesPage,
+    SafeHeavenPage,
+    SafeHeavenCreatePage,
+    SafeHeavenDetailPage
   ],
   providers: [
     NotificationsService,
@@ -137,7 +148,10 @@ import { IonicStorageModule } from '@ionic/storage';
     BTService,
     AlertService,
     LocalNotifications,
-    GeolocationService
+    GeolocationService,
+    SafeHeavenService,
+
+    BackgroundMode
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })

@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 import { baseUrl, apiVersion } from './environment';
 import { Storage } from '@ionic/storage';
 @Injectable()
+//handles JwT and authentication process
 export class AuthService {
     private socialSecret: string = 'e4901652-9ef1-4e79-abd1-cde058ba51bf';
     private baseUrl: string = baseUrl;

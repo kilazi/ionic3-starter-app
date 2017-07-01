@@ -151,14 +151,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "com.unarin.cordova.beacon": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-ibeacon"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
     "de.appplant.cordova.plugin.local-notification": {
         "source": {
             "type": "registry",
@@ -173,6 +165,14 @@
             "id": "cordova-plugin-app-event"
         },
         "is_top_level": false,
+        "variables": {}
+    },
+    "cordova-plugin-background-mode": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-background-mode"
+        },
+        "is_top_level": true,
         "variables": {}
     }
 }

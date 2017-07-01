@@ -10,9 +10,6 @@
         "call-number": {
             "PACKAGE_NAME": "com.startapplabs.ion2FullApp"
         },
-        "com.unarin.cordova.beacon": {
-            "PACKAGE_NAME": "com.startapplabs.ion2FullApp"
-        },
         "cordova-plugin-ble-central": {
             "PACKAGE_NAME": "com.startapplabs.ion2FullApp"
         },
@@ -59,6 +56,9 @@
         },
         "de.appplant.cordova.plugin.local-notification": {
             "PACKAGE_NAME": "com.startapplabs.ion2FullApp"
+        },
+        "cordova-plugin-background-mode": {
+            "PACKAGE_NAME": "com.whitetechnologies.bluetooth"
         }
     },
     "dependent_plugins": {

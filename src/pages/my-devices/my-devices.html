@@ -3,7 +3,7 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>My Device</ion-title>
+        <ion-title>My Devices</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -14,10 +14,16 @@
         <ng-template ngFor let-id [ngForOf]="mapping">
             <button ion-item *ngIf="devices[id]" (click)="open(id)">
                 {{ devices[id].name }}
+                
+                <div *ngIf="devices_meta[id]" class="signal signal-{{devices_meta[id].rangeCondition*20}}">
+                    <div class="bar"></div>
+                </div>
             </button>
         </ng-template>
         <button ion-button full (click)="update()">Refresh</button>
         <button ion-button full (click)="addDevice()">Add Device</button>
+        <button ion-button full (click)="checkDevices()"><span *ngIf="checkInProgress">Loading</span><span *ngIf="!checkInProgress">Quick Check</span></button>
+        <button ion-button full (click)="goSafeHeaven()">Safe Heaven List</button>
 
     </ion-list>
 

@@ -1,6 +1,7 @@
+import { GlobalService } from './../../common/global.service';
 import { NgZone } from '@angular/core';
-import { BTService, device } from './../../common/bluetooth.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { BTService, device, RANGE } from './../../common/bluetooth.service';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NavController, Range, NavParams, LoadingController } from 'ionic-angular';
 import { FormGroup, FormControl } from '@angular/forms';
 import { counterRangeValidator } from '../../components/counter-input/counter-input';
@@ -11,16 +12,17 @@ import { Geolocation } from '@ionic-native/geolocation';
   selector: 'device-page',
   templateUrl: 'device.html'
 })
-export class DevicePage implements OnInit {
+export class DevicePage implements AfterViewInit {
   private device: device;
-  // private rangeCondition: number = 5;
+  private ranges = Object.keys(RANGE);
   @ViewChild(GoogleMap) _GoogleMap: GoogleMap;
   map_model: MapsModel = new MapsModel();
 
   constructor(
     private bt: BTService,
     private navParams: NavParams,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private gs: GlobalService
   ) {
     this.device = this.navParams.get('device');
     console.log(this.device);
@@ -28,11 +30,11 @@ export class DevicePage implements OnInit {
 
 
 
-  ngOnInit() {
+  ngAfterViewInit() {
 
     this.bt.deviceScanned.subscribe((device: device) => {
       if (device.bt.id == this.device.bt.id) {
-        this.gs.simpleToast('Refreshed');
+        // this.gs.simpleToast('Refreshed');
         this.ngZone.run(() => {
           console.log('this device was scanned '+ device.meta.type
            + ', distance:  ' + device.meta.distance 
@@ -41,7 +43,7 @@ export class DevicePage implements OnInit {
           this.device = device;
           // this.rangeCondition = device.meta.rangeCondition;
           if (this.device.meta.gps)
-            this.map_model.map.setCenter({ lat: this.device.meta.gps.latitude, lng: this.device.meta.gps.longitude });
+            this.map_model.map.setCenter(this.device.meta.gps);
 
         })
         // this.setActive(device.meta.type);
@@ -55,7 +57,7 @@ export class DevicePage implements OnInit {
       this.map_model.using_geolocation = true;
       // console.log('set coords ' + JSON.stringify(this.device.meta.gps)); 
       if (this.device.meta.gps) {
-        let location: google.maps.LatLng = new google.maps.LatLng(this.device.meta.gps.latitude, this.device.meta.gps.longitude);
+        let location: google.maps.LatLng = this.device.meta.gps;
         this.map_model.map.setCenter(location);
         this.map_model.addPlaceToMap(location, '#00e9d5');
       }
@@ -131,8 +133,8 @@ export class DevicePage implements OnInit {
 
   setActive(type: string) {
     this.device.meta.type = type;
-    console.log('type changed');
-    this.bt.setType(this.device.bt['id'], type).subscribe(res => {
+    console.log('type changed', type);
+    this.bt.setType(this.device.bt.id, type).subscribe(res => {
       console.log('changed type successfully');
     })
   }

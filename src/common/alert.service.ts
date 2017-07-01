@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 import { baseUrl, apiVersion } from './environment';
 import { Storage } from '@ionic/storage';
 @Injectable()
+//this service contains logic about in-app and local alerts
 export class AlertService {
     constructor(
         private alertCtrl: AlertController,

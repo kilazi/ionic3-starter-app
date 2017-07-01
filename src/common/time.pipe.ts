@@ -10,6 +10,7 @@ import 'rxjs/add/operator/takeWhile';
   name: 'timeAgo',
   pure: false
 })
+//converts timestamp into "... minutes ago" format
 export class TimePipe implements PipeTransform, OnDestroy {
   private readonly async: AsyncPipe;
 

@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Safe Heavens</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+
+        <ion-item>
+            <ion-label fixed>Name</ion-label>
+            <ion-input [(ngModel)]="name" type="text" value=""></ion-input>
+        </ion-item>
+
+    </ion-list>
+    <button *ngFor="let _radius of radiuses" ion-button [clear]="_radius.value != radius" [round]="_radius.value == radius" (click)="setActive(_radius.value)">{{_radius.name}}</button>
+    <button ion-button full (click)="create()">Create</button>
+
+    <div class="map-container">
+        <google-map [options]="map_model.map_options"></google-map>
+    </div>
+
+
+</ion-content>
