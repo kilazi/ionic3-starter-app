@@ -72,7 +72,7 @@
         <ol>
             <li dir="ltr">
                 <p dir="ltr">
-                    ionic run ios
+                    ionic run ios -l --device
                 </p>
             </li>
             <li dir="ltr">
@@ -252,6 +252,22 @@
         <p dir="ltr">
             you might need to use ionic proxy to develop on devices with live
             reload or CORS plugin to develop in browser mode
+        </p>
+    </li>
+    <li dir="ltr">
+        <p dir="ltr">
+            if you want to develop on device with livereload, you will want to configure proxy. do so by adding this: 
+            <code>
+                "proxies": [
+                    {
+                        "path": "/API",
+                        "proxyUrl": "YOUR_SERVER_ADDRESS"
+                    }
+                ],
+            </code>
+            into ionic-config.json. then you might want to configure the environment.ts file so that if "cordova" is detected 
+            (means livereload while you develop) it would go through proxy, otherwise (in browser) - straight to the server.
+            <br/>while developing in browser you probably want to use one of the CORS plugins to avoid issues
         </p>
     </li>
 </ol>
