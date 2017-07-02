@@ -1,4 +1,4 @@
-import { MyDevicesPage } from './../my-devices/my-devices';
+import { AllDevicesPage } from './../all-devices/all-devices';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
@@ -14,7 +14,7 @@ export class ForgotPasswordPage {
   main_page: { component: any };
 
   constructor(public nav: NavController) {
-    this.main_page = { component: MyDevicesPage };
+    this.main_page = { component: AllDevicesPage };
 
     this.forgot_password = new FormGroup({
       email: new FormControl('', Validators.required)

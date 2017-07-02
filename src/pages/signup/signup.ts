@@ -1,4 +1,3 @@
-import { MyDevicesPage } from './../my-devices/my-devices';
 import { AllDevicesPage } from './../all-devices/all-devices';
 import { JwtHelper } from 'angular2-jwt';
 import { GlobalService } from './../../common/global.service';
@@ -29,7 +28,7 @@ export class SignupPage {
     public gs: GlobalService,
     public jwt: JwtHelper
   ) {
-    this.main_page = { component: MyDevicesPage };
+    this.main_page = { component: AllDevicesPage };
 
     this.signup = new FormGroup({
       email: new FormControl('', Validators.required),

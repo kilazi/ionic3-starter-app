@@ -1,12 +1,8 @@
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { GeolocationService } from './../common/geolocations.service';
-import { MyDevicesPage } from './../pages/my-devices/my-devices';
 import { AllDevicesPage } from './../pages/all-devices/all-devices';
-import { MapsPage } from './../pages/maps/maps';
-import { BTService } from './../common/bluetooth.service';
 import { LoginPage } from './../pages/login/login';
 import { HttpService } from './../common/http.service';
-import { ListingPage } from './../pages/listing/listing';
 import { AuthService } from './../common/auth.service';
 import { Component, ViewChild } from '@angular/core';
 import { Platform, MenuController, Nav, App } from 'ionic-angular';
@@ -14,7 +10,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { baseUrl } from '../common/environment';
 import { WalkthroughPage } from '../pages/walkthrough/walkthrough';
-import { SettingsPage } from '../pages/settings/settings';
 
 
 @Component({
@@ -42,9 +37,7 @@ export class MyApp {
     public authService: AuthService,
     public http: HttpService,
     public auth: AuthService,
-    public bt: BTService,
-    public geo: GeolocationService,
-    private backgroundMode: BackgroundMode
+    public geo: GeolocationService
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -52,33 +45,25 @@ export class MyApp {
       this.splashScreen.hide();
       this.statusBar.styleDefault();
       this.geo.watch();
-      this.backgroundMode.enable();
     });
 
     this.pages = [
-      { title: 'Devices', icon: 'create', component: MyDevicesPage },
+      { title: 'Home', icon: 'create', component: AllDevicesPage },
       // { title: 'My Devices', icon: 'home', component: FormsPage },
       // { title: 'Functionalities', icon: 'code', component: FunctionalitiesPage }
     ];
 
     this.pushPages = [
       // { title: 'Layouts', icon: 'grid', component: LayoutsPage },
-      { title: 'Maps', icon: 'grid', component: MapsPage },
-      { title: 'Settings', icon: 'settings', component: SettingsPage }
+      // { title: 'Maps', icon: 'grid', component: MapsPage },
+      // { title: 'Settings', icon: 'settings', component: SettingsPage }
     ];
   
-    // this.bt.showMyDevices().subscribe(res => {
-    //   res['connectedMapping'].forEach(id => this.bt.connectBLE(id)) 
-    // })
-
     
     
 
     this.authService.checkToken().subscribe(() => {
       console.log('token recognised');
-      // setTimeout(() => 
-      this.nav.setRoot(MyDevicesPage), 300
-      // );
     }, () => {
       
     })

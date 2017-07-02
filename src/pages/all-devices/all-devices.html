@@ -1,20 +1,13 @@
 <ion-header>
     <ion-navbar>
-        <ion-title>Connect Device</ion-title>
+        <ion-title>Starter</ion-title>
     </ion-navbar>
 </ion-header>
 
 <ion-content>
 
-
-    <ion-list inset>
-        <ng-template ngFor let-id [ngForOf]="mapping">
-            <button ion-item *ngIf="devices[id]" (click)="connect(devices[id])">
-                <span *ngIf="devices[id].name">{{ devices[id].name }}</span>
-                <span *ngIf="!devices[id].name">{{ id }}</span>
-            </button>
-        </ng-template>
-        <button ion-button full (click)="update()">Scan</button>
-    </ion-list>
+<p>
+    JwT, Ion2FullAppTemplate are in here. rock on! \m/
+</p>
 
 </ion-content>

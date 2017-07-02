@@ -1,6 +1,5 @@
 import { AuthService } from './auth.service';
 import { Platform } from 'ionic-angular';
-// import { LoginPage } from './../pages/login/login';
 import { GlobalService } from './global.service';
 import { baseUrl, apiVersion } from './environment';
 import { ToastController, AlertController, NavController } from 'ionic-angular';
@@ -8,6 +7,9 @@ import { Observable } from 'rxjs/Observable';
 import { Inject, Injectable } from '@angular/core';
 import { Headers, Http, RequestOptionsArgs, URLSearchParams } from '@angular/http';
 import { Storage } from '@ionic/storage';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
+
 @Injectable()
 //main http handler service. handles errors, headers and JwT
 export class HttpService {
@@ -19,7 +21,6 @@ export class HttpService {
         private toastCtrl: ToastController,
         private platform: Platform,
         private auth: AuthService
-        // private navCtrl: NavController,
     ) {
         if (!this.platform.is('cordova')) {
             this.baseUrl = "http://62.109.16.138:1337";
